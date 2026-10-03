@@ -1,0 +1,75 @@
+import { useForm } from 'react-hook-form';
+import { Navigate, useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import { useAuth } from '../../context/AuthContext';
+
+const Login = () => {
+  const { admin, login } = useAuth();
+  const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm();
+
+  if (admin) return <Navigate to="/admin" replace />;
+
+  const onSubmit = async ({ email, password }) => {
+    try {
+      await login(email, password);
+      toast.success('Welcome back!');
+      navigate('/admin');
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Login failed. Server chal raha hai?');
+    }
+  };
+
+  const inputClass =
+    'w-full bg-ink border border-line px-4 py-3 text-white placeholder-neutral-600 focus:outline-none focus:border-gold transition-colors';
+
+  return (
+    <div className="min-h-screen flex items-center justify-center px-5 bg-ink">
+      <div className="w-full max-w-md bg-surface border border-line p-8 md:p-10">
+        <div className="text-center mb-8">
+          <p className="text-gold tracking-[0.35em] text-[10px] uppercase mb-3">Admin Panel</p>
+          <h1 className="font-serif text-3xl text-white">Vikash Rana</h1>
+          <div className="w-12 h-px bg-gold mx-auto mt-4" />
+        </div>
+
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+          <div>
+            <label className="block text-xs uppercase tracking-wider text-neutral-400 mb-2">Email</label>
+            <input
+              type="email"
+              placeholder="admin@example.com"
+              className={inputClass}
+              {...register('email', { required: 'Email is required' })}
+            />
+            {errors.email && <p className="text-red-400 text-xs mt-1">{errors.email.message}</p>}
+          </div>
+
+          <div>
+            <label className="block text-xs uppercase tracking-wider text-neutral-400 mb-2">Password</label>
+            <input
+              type="password"
+              placeholder="••••••••"
+              className={inputClass}
+              {...register('password', { required: 'Password is required' })}
+            />
+            {errors.password && <p className="text-red-400 text-xs mt-1">{errors.password.message}</p>}
+          </div>
+
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="w-full bg-gold hover:bg-gold-light text-black font-medium py-3 tracking-wider uppercase text-sm transition-colors disabled:opacity-60"
+          >
+            {isSubmitting ? 'Signing in...' : 'Sign In'}
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+export default Login;
