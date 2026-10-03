@@ -70,7 +70,7 @@ const BarList = ({ items, empty = 'Abhi data nahi hai', format = (n) => n }) => 
 
 const pct = (n, total) => (total ? `${Math.round((n / total) * 100)}%` : '0%');
 
-const ActivityMonitor = () => {
+const ActivityMonitor = ({ embedded = false }) => {
   const [days, setDays] = useState(7);
   const [data, setData] = useState(null);
   const [error, setError] = useState('');
@@ -161,19 +161,29 @@ const ActivityMonitor = () => {
   const change = totals.viewsChange;
 
   return (
-    <div className="max-w-6xl">
-      <PageHeader
-        title="Monitor Activity"
-        subtitle={updatedAt ? `Live data · updated ${timeAgo(updatedAt)}` : 'Live data'}
-        action={
+    <div className={embedded ? '' : 'max-w-6xl'}>
+      {(() => {
+        const refreshBtn = (
           <button
             onClick={refreshAll}
             className="min-h-11 px-4 border border-line text-neutral-300 hover:border-gold hover:text-gold text-xs uppercase tracking-[0.15em] inline-flex items-center gap-2"
           >
             <FaSyncAlt className={refreshing ? 'animate-spin' : ''} /> Refresh
           </button>
-        }
-      />
+        );
+        const sub = updatedAt ? `Live data · updated ${timeAgo(updatedAt)}` : 'Live data';
+        return embedded ? (
+          <div className="flex flex-wrap items-end justify-between gap-4 mb-6">
+            <div>
+              <h2 className="font-serif text-2xl text-white">Monitor Activity</h2>
+              <p className="text-neutral-500 text-sm mt-1">{sub}</p>
+            </div>
+            {refreshBtn}
+          </div>
+        ) : (
+          <PageHeader title="Monitor Activity" subtitle={sub} action={refreshBtn} />
+        );
+      })()}
 
       {error && <p className="text-red-400 text-sm mb-4">{error}</p>}
 
