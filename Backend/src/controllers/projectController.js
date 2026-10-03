@@ -106,9 +106,14 @@ export const updateProject = async (req, res) => {
     throw err;
   }
 
-  // Save safal hone ke baad hi purani images Cloudinary se hatao
-  for (const id of removeIds) await deleteImage(id);
-  if (req.files?.coverImage?.[0] && oldCoverId) await deleteImage(oldCoverId);
+  // Save safal hone ke baad hi purani images Cloudinary se hatao.
+  // Cover aur gallery ek hi image share kar sakte hain, isliye jo abhi bhi use ho rahi hai use mat hatao.
+  const inUse = new Set([project.coverImage?.public_id, ...project.images.map((i) => i.public_id)]);
+  const toDelete = [...removeIds];
+  if (req.files?.coverImage?.[0] && oldCoverId) toDelete.push(oldCoverId);
+  for (const id of new Set(toDelete)) {
+    if (!inUse.has(id)) await deleteImage(id);
+  }
 
   res.json({ success: true, data: project });
 };

@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useCallback, useEffect, useRef } from 'react';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { FaTimes, FaChevronLeft, FaChevronRight, FaShareAlt, FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import useFetch from '../../hooks/useFetch';
@@ -12,7 +12,10 @@ const ProjectDetail = () => {
   const { slug } = useParams();
   const { data: project, loading, error } = useFetch(`/projects/${slug}`);
   const { data: all } = useFetch('/projects');
-  const [lightbox, setLightbox] = useState(null);
+  const location = useLocation();
+  const navigate = useNavigate();
+  // Lightbox ka photo index history state mein rehta hai: back button usse band karta hai, page se bahar nahi le jaata
+  const lightbox = location.state?.lightbox ?? null;
   const touchX = useRef(null);
 
   const gallery = project
@@ -24,16 +27,23 @@ const ProjectDetail = () => {
     : [];
   const count = gallery.length;
 
+  const showPhoto = useCallback(
+    (i, replace = false) => navigate(`${location.pathname}${location.search}`, { replace, state: { lightbox: i } }),
+    [navigate, location.pathname, location.search]
+  );
+  const closeLightbox = useCallback(() => navigate(-1), [navigate]);
   const go = useCallback(
-    (dir) => setLightbox((i) => (i === null ? i : (i + dir + count) % count)),
-    [count]
+    (dir) => {
+      if (lightbox !== null && count > 0) showPhoto((lightbox + dir + count) % count, true);
+    },
+    [lightbox, count, showPhoto]
   );
 
   // Keyboard: Esc / arrows. Lightbox khula ho to page scroll lock.
   useEffect(() => {
     if (lightbox === null) return undefined;
     const onKey = (e) => {
-      if (e.key === 'Escape') setLightbox(null);
+      if (e.key === 'Escape') closeLightbox();
       if (e.key === 'ArrowRight') go(1);
       if (e.key === 'ArrowLeft') go(-1);
     };
@@ -44,10 +54,7 @@ const ProjectDetail = () => {
       document.body.style.overflow = prev;
       window.removeEventListener('keydown', onKey);
     };
-  }, [lightbox, go]);
-
-  // Doosre project par jaane par lightbox band
-  useEffect(() => setLightbox(null), [slug]);
+  }, [lightbox, go, closeLightbox]);
 
   const onTouchStart = (e) => {
     touchX.current = e.touches[0].clientX;
@@ -168,7 +175,7 @@ const ProjectDetail = () => {
             {gallery.map((g, i) => (
               <button
                 key={g.public_id}
-                onClick={() => setLightbox(i)}
+                onClick={() => showPhoto(i)}
                 className="block w-full overflow-hidden group"
                 aria-label={`Open photo ${i + 1}`}
               >
@@ -228,7 +235,7 @@ const ProjectDetail = () => {
       {lightbox !== null && gallery[lightbox] && (
         <div
           className="fixed inset-0 z-[60] bg-black/95 flex items-center justify-center"
-          onClick={() => setLightbox(null)}
+          onClick={closeLightbox}
           onTouchStart={onTouchStart}
           onTouchEnd={onTouchEnd}
           role="dialog"
@@ -236,7 +243,7 @@ const ProjectDetail = () => {
         >
           <button
             className="absolute top-[calc(0.75rem+env(safe-area-inset-top))] right-3 h-11 w-11 flex items-center justify-center text-white text-2xl"
-            onClick={() => setLightbox(null)}
+            onClick={closeLightbox}
             aria-label="Close"
           >
             <FaTimes />

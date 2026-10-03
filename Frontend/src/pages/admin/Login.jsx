@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { useAuth } from '../../context/AuthContext';
 
@@ -70,6 +70,13 @@ const Login = () => {
             {isSubmitting ? 'Signing in...' : 'Sign In'}
           </button>
         </form>
+
+        <Link
+          to="/"
+          className="mt-6 flex items-center justify-center min-h-11 text-xs uppercase tracking-[0.2em] text-neutral-500 hover:text-gold transition-colors"
+        >
+          ← Back to website
+        </Link>
       </div>
     </div>
   );

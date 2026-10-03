@@ -3,7 +3,7 @@ import { logActivity } from '../utils/logActivity.js';
 
 // PUBLIC: contact form submit
 export const createMessage = async (req, res) => {
-  const { name, email, phone, subject, message, website } = req.body;
+  const { name, email, phone, subject, message, website } = req.body || {};
 
   // Honeypot: bots hidden "website" field bhar dete hain. Chupchap success dikha do.
   if (website) return res.status(201).json({ success: true, message: 'Message sent successfully' });

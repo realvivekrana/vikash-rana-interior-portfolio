@@ -16,7 +16,9 @@ export const AuthProvider = ({ children }) => {
     api
       .get('/auth/me')
       .then((res) => setAdmin(res.data.admin))
-      .catch(() => localStorage.removeItem('adminToken'))
+      .catch((err) => {
+        if (err.response?.status === 401) localStorage.removeItem('adminToken');
+      })
       .finally(() => setLoading(false));
   }, []);
 

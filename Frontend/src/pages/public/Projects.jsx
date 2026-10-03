@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import useFetch from '../../hooks/useFetch';
 import SectionTitle from '../../components/common/SectionTitle';
 import ProjectCard from '../../components/common/ProjectCard';
@@ -8,9 +8,13 @@ import Reveal from '../../components/common/Reveal';
 
 const Projects = () => {
   const { data: projects, loading } = useFetch('/projects');
-  const [active, setActive] = useState('All');
+  const [params, setParams] = useSearchParams();
 
   const categories = ['All', ...new Set((projects || []).map((p) => p.category))];
+  const wanted = params.get('category') || 'All';
+  const active = categories.includes(wanted) ? wanted : 'All';
+  // replace: filter badalne se back button ki history lambi na ho
+  const setActive = (c) => setParams(c === 'All' ? {} : { category: c }, { replace: true });
   const filtered = active === 'All' ? projects || [] : (projects || []).filter((p) => p.category === active);
 
   return (

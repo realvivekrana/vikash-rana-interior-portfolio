@@ -3,11 +3,14 @@ import generateToken from '../utils/generateToken.js';
 import { logActivity } from '../utils/logActivity.js';
 
 export const login = async (req, res) => {
-  const { email, password } = req.body;
-  if (!email || !password) {
+  const { email: rawEmail, password: rawPassword } = req.body || {};
+  if (!rawEmail || !rawPassword) {
     res.status(400);
     throw new Error('Email and password required');
   }
+  // String() se object/array inject nahi ho sakta; email DB mein lowercase store hota hai
+  const email = String(rawEmail).trim().toLowerCase();
+  const password = String(rawPassword);
 
   const admin = await Admin.findOne({ email }).select('+password');
   if (!admin || !(await admin.matchPassword(password))) {

@@ -26,7 +26,7 @@ const projectSchema = new mongoose.Schema(
 );
 
 projectSchema.pre('validate', function () {
-  if (this.isModified('title') || !this.slug) {
+  if (!this.slug) {
     const base = this.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
     this.slug = `${base}-${crypto.randomBytes(3).toString('hex')}`;
   }

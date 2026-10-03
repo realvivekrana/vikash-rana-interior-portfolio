@@ -4,7 +4,7 @@ import useFetch from '../../hooks/useFetch';
 import { img } from '../../utils/img';
 
 const Hero = () => {
-  const { data: hero } = useFetch('/hero');
+  const { data: hero, loading } = useFetch('/hero');
   const bg = hero?.backgroundImage?.url;
 
   return (
@@ -23,6 +23,10 @@ const Hero = () => {
         <div className="absolute inset-0 bg-gradient-to-br from-surface via-ink to-black" />
       )}
       <div className="absolute inset-0 bg-black/60" />
+
+      {loading && (
+        <div className="relative z-10 h-10 w-10 rounded-full border-2 border-gold border-t-transparent animate-spin" role="status" aria-label="Loading" />
+      )}
 
       {hero && (
         <div className="relative z-10 text-center px-6 max-w-4xl">

@@ -3,6 +3,7 @@ import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import {
   FaThLarge, FaImages, FaConciergeBell, FaQuoteLeft, FaImage,
   FaUser, FaEnvelope, FaCog, FaSignOutAlt, FaBars, FaTimes,
+  FaTasks, FaFilePdf, FaChartLine,
 } from 'react-icons/fa';
 import { useAuth } from '../context/AuthContext';
 
@@ -10,10 +11,13 @@ const links = [
   { to: '/admin', label: 'Dashboard', icon: FaThLarge, end: true },
   { to: '/admin/projects', label: 'Projects', icon: FaImages },
   { to: '/admin/services', label: 'Services', icon: FaConciergeBell },
+  { to: '/admin/skills', label: 'Skills', icon: FaTasks },
+  { to: '/admin/documents', label: 'Resume & PDFs', icon: FaFilePdf },
   { to: '/admin/testimonials', label: 'Testimonials', icon: FaQuoteLeft },
   { to: '/admin/hero', label: 'Hero Section', icon: FaImage },
   { to: '/admin/about', label: 'About', icon: FaUser },
   { to: '/admin/messages', label: 'Messages', icon: FaEnvelope },
+  { to: '/admin/activity', label: 'Activity Monitor', icon: FaChartLine },
   { to: '/admin/settings', label: 'Settings', icon: FaCog },
 ];
 
