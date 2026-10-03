@@ -10,6 +10,13 @@ import Services from '../pages/public/Services';
 import Contact from '../pages/public/Contact';
 import Login from '../pages/admin/Login';
 import Dashboard from '../pages/admin/Dashboard';
+import ManageProjects from '../pages/admin/ManageProjects';
+import ManageServices from '../pages/admin/ManageServices';
+import ManageTestimonials from '../pages/admin/ManageTestimonials';
+import ManageHero from '../pages/admin/ManageHero';
+import ManageAbout from '../pages/admin/ManageAbout';
+import Messages from '../pages/admin/Messages';
+import Settings from '../pages/admin/Settings';
 
 const AppRoutes = () => (
   <Routes>
@@ -33,6 +40,13 @@ const AppRoutes = () => (
       }
     >
       <Route index element={<Dashboard />} />
+      <Route path="projects" element={<ManageProjects />} />
+      <Route path="services" element={<ManageServices />} />
+      <Route path="testimonials" element={<ManageTestimonials />} />
+      <Route path="hero" element={<ManageHero />} />
+      <Route path="about" element={<ManageAbout />} />
+      <Route path="messages" element={<Messages />} />
+      <Route path="settings" element={<Settings />} />
     </Route>
   </Routes>
 );
