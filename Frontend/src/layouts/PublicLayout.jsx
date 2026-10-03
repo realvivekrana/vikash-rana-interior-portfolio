@@ -3,6 +3,7 @@ import { Outlet, useLocation } from 'react-router-dom';
 import { SiteProvider } from '../context/SiteContext';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
+import AdminBar from '../components/layout/AdminBar';
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -21,6 +22,7 @@ const PublicLayout = () => (
         <Outlet />
       </main>
       <Footer />
+      <AdminBar />
     </div>
   </SiteProvider>
 );

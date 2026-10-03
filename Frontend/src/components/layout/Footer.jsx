@@ -73,8 +73,10 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="border-t border-line py-5 text-center text-xs text-neutral-600">
-          © {new Date().getFullYear()} {s?.siteName || 'Vikash Rana Interiors'}. All rights reserved.
+        <div className="border-t border-line py-5 px-5 flex flex-col sm:flex-row items-center justify-center gap-3 text-xs text-neutral-600">
+          <span>© {new Date().getFullYear()} {s?.siteName || 'Vikash Rana Interiors'}. All rights reserved.</span>
+          <span className="hidden sm:inline text-neutral-800">|</span>
+          <Link to="/admin" className="hover:text-gold transition-colors">Admin Login</Link>
         </div>
       </footer>
 
