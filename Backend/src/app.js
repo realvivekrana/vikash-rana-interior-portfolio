@@ -13,6 +13,11 @@ import aboutRoutes from './routes/aboutRoutes.js';
 import settingsRoutes from './routes/settingsRoutes.js';
 import messageRoutes from './routes/messageRoutes.js';
 import dashboardRoutes from './routes/dashboardRoutes.js';
+import skillRoutes from './routes/skillRoutes.js';
+import documentRoutes from './routes/documentRoutes.js';
+import activityRoutes from './routes/activityRoutes.js';
+import trackRoutes from './routes/trackRoutes.js';
+import { auditMiddleware } from './utils/logActivity.js';
 
 const app = express();
 
@@ -39,6 +44,7 @@ app.use(
 app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 app.use(cookieParser());
+app.use(auditMiddleware); // admin ke har successful change ka log
 
 app.get('/api/health', (req, res) => {
   res.json({ success: true, message: 'API is running' });
@@ -53,6 +59,10 @@ app.use('/api/about', aboutRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/skills', skillRoutes);
+app.use('/api/documents', documentRoutes);
+app.use('/api/activity', activityRoutes);
+app.use('/api/track', trackRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

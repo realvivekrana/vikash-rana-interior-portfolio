@@ -37,4 +37,10 @@ export const contactLimiter = rateLimit({
   message: 'Too many messages sent. Please try again later.',
 });
 
+export const trackLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 120,
+  message: 'Too many tracking requests.',
+});
+
 export default rateLimit;

@@ -1,4 +1,5 @@
 import Message from '../models/Message.js';
+import { logActivity } from '../utils/logActivity.js';
 
 // PUBLIC: contact form submit
 export const createMessage = async (req, res) => {
@@ -21,6 +22,13 @@ export const createMessage = async (req, res) => {
     phone: (phone || '').trim().slice(0, 30),
     subject: (subject || '').trim().slice(0, 150),
     message: message.trim(),
+  });
+  logActivity(req, {
+    kind: 'message',
+    action: 'received',
+    entity: 'Message',
+    label: `New contact message from ${name.trim().slice(0, 60)}`,
+    actor: 'Visitor',
   });
   res.status(201).json({ success: true, message: 'Message sent successfully' });
 };

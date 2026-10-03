@@ -4,6 +4,7 @@ import Hero from '../models/Hero.js';
 import About from '../models/About.js';
 import Service from '../models/Service.js';
 import Settings from '../models/Settings.js';
+import Skill from '../models/Skill.js';
 
 // Sirf KHALI collections mein starter content daalta hai. Jo pehle se hai usse chhedta nahi.
 const services = [
@@ -13,6 +14,17 @@ const services = [
   ['Bedroom Design', 'Calm, comfortable bedrooms with custom wardrobes and storage.', 'FaBed'],
   ['Office & Commercial', 'Productive workspaces and retail interiors that reflect your brand.', 'FaBuilding'],
   ['Turnkey Execution', 'Design, material, carpentry and finishing, all handled under one roof.', 'FaTools'],
+];
+
+const skills = [
+  ['Space Planning', 92, 'Design'],
+  ['Lighting Design', 82, 'Design'],
+  ['Material Selection', 86, 'Design'],
+  ['AutoCAD', 90, 'Software'],
+  ['SketchUp', 85, 'Software'],
+  ['3ds Max + V-Ray', 78, 'Software'],
+  ['Site Supervision', 88, 'Execution'],
+  ['Client Handling', 90, 'Execution'],
 ];
 
 const run = async () => {
@@ -44,6 +56,11 @@ const run = async () => {
       services.map(([title, description, icon], i) => ({ title, description, icon, order: i }))
     );
     console.log(`${services.length} services created`);
+  }
+
+  if ((await Skill.countDocuments()) === 0) {
+    await Skill.insertMany(skills.map(([name, level, category], i) => ({ name, level, category, order: i })));
+    console.log(`${skills.length} skills created`);
   }
 
   console.log('Demo seed done. Ab admin panel se apna asli content daalo.');

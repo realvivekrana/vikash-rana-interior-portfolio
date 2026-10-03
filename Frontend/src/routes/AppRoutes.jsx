@@ -8,6 +8,9 @@ import Projects from '../pages/public/Projects';
 import ProjectDetail from '../pages/public/ProjectDetail';
 import Services from '../pages/public/Services';
 import Contact from '../pages/public/Contact';
+import Skills from '../pages/public/Skills';
+import Resume from '../pages/public/Resume';
+import Pdfs from '../pages/public/Pdfs';
 import NotFound from '../pages/public/NotFound';
 import Login from '../pages/admin/Login';
 import Dashboard from '../pages/admin/Dashboard';
@@ -18,6 +21,9 @@ import ManageHero from '../pages/admin/ManageHero';
 import ManageAbout from '../pages/admin/ManageAbout';
 import Messages from '../pages/admin/Messages';
 import Settings from '../pages/admin/Settings';
+import ManageSkills from '../pages/admin/ManageSkills';
+import ManageDocuments from '../pages/admin/ManageDocuments';
+import ActivityMonitor from '../pages/admin/ActivityMonitor';
 
 const AppRoutes = () => (
   <Routes>
@@ -27,6 +33,9 @@ const AppRoutes = () => (
       <Route path="/projects" element={<Projects />} />
       <Route path="/projects/:slug" element={<ProjectDetail />} />
       <Route path="/services" element={<Services />} />
+      <Route path="/skills" element={<Skills />} />
+      <Route path="/resume" element={<Resume />} />
+      <Route path="/pdfs" element={<Pdfs />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="*" element={<NotFound />} />
     </Route>
@@ -48,6 +57,9 @@ const AppRoutes = () => (
       <Route path="hero" element={<ManageHero />} />
       <Route path="about" element={<ManageAbout />} />
       <Route path="messages" element={<Messages />} />
+      <Route path="skills" element={<ManageSkills />} />
+      <Route path="documents" element={<ManageDocuments />} />
+      <Route path="activity" element={<ActivityMonitor />} />
       <Route path="settings" element={<Settings />} />
     </Route>
   </Routes>

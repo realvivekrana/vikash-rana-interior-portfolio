@@ -7,6 +7,9 @@ const links = [
   { to: '/', label: 'Home' },
   { to: '/projects', label: 'Projects' },
   { to: '/services', label: 'Services' },
+  { to: '/skills', label: 'Skills' },
+  { to: '/resume', label: 'Resume' },
+  { to: '/pdfs', label: 'PDFs' },
   { to: '/about', label: 'About' },
   { to: '/contact', label: 'Contact' },
 ];
@@ -63,14 +66,14 @@ const Navbar = () => {
           )}
         </Link>
 
-        <nav className="hidden md:flex items-center gap-9" aria-label="Main">
+        <nav className="hidden lg:flex items-center gap-5 xl:gap-8" aria-label="Main">
           {links.map(({ to, label }) => (
             <NavLink
               key={to}
               to={to}
               end={to === '/'}
               className={({ isActive }) =>
-                `text-xs uppercase tracking-[0.2em] pb-1 border-b transition-colors ${
+                `text-[11px] xl:text-xs uppercase tracking-[0.15em] xl:tracking-[0.2em] pb-1 border-b transition-colors whitespace-nowrap ${
                   isActive
                     ? 'text-gold border-gold'
                     : 'text-neutral-300 border-transparent hover:text-gold'
@@ -84,7 +87,7 @@ const Navbar = () => {
 
         <button
           onClick={() => setOpen(!open)}
-          className="md:hidden h-11 w-11 -mr-2 flex items-center justify-center text-white text-xl"
+          className="lg:hidden h-11 w-11 -mr-2 flex items-center justify-center text-white text-xl"
           aria-label={open ? 'Close menu' : 'Open menu'}
           aria-expanded={open}
         >
@@ -94,7 +97,7 @@ const Navbar = () => {
 
       {open && (
         <nav
-          className="md:hidden bg-ink border-t border-line px-5 pb-6 flex flex-col h-[calc(100dvh-4rem)] overflow-y-auto"
+          className="lg:hidden bg-ink border-t border-line px-5 pb-[calc(1.5rem+env(safe-area-inset-bottom))] flex flex-col h-[calc(100dvh-4rem)] overflow-y-auto"
           aria-label="Mobile"
         >
           {links.map(({ to, label }) => (
@@ -103,7 +106,7 @@ const Navbar = () => {
               to={to}
               end={to === '/'}
               className={({ isActive }) =>
-                `min-h-14 flex items-center text-base font-serif tracking-wide border-b border-line/60 ${
+                `min-h-12 shrink-0 flex items-center text-base font-serif tracking-wide border-b border-line/60 ${
                   isActive ? 'text-gold' : 'text-neutral-200'
                 }`
               }
@@ -113,7 +116,7 @@ const Navbar = () => {
           ))}
           <Link
             to="/contact"
-            className="mt-8 bg-gold text-black min-h-12 flex items-center justify-center text-xs uppercase tracking-[0.25em]"
+            className="mt-8 shrink-0 bg-gold text-black min-h-12 flex items-center justify-center text-xs uppercase tracking-[0.25em]"
           >
             Get a Free Consultation
           </Link>

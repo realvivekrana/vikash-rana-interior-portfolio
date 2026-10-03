@@ -1,5 +1,6 @@
 import Admin from '../models/Admin.js';
 import generateToken from '../utils/generateToken.js';
+import { logActivity } from '../utils/logActivity.js';
 
 export const login = async (req, res) => {
   const { email, password } = req.body;
@@ -10,9 +11,25 @@ export const login = async (req, res) => {
 
   const admin = await Admin.findOne({ email }).select('+password');
   if (!admin || !(await admin.matchPassword(password))) {
+    logActivity(req, {
+      kind: 'auth',
+      action: 'login_failed',
+      entity: 'Account',
+      label: `Failed login attempt for ${String(email).slice(0, 80)}`,
+      actor: String(email).slice(0, 80),
+      status: 'failed',
+    });
     res.status(401);
     throw new Error('Invalid email or password');
   }
+
+  logActivity(req, {
+    kind: 'auth',
+    action: 'login',
+    entity: 'Account',
+    label: 'Admin logged in',
+    actor: admin.email,
+  });
 
   res.json({
     success: true,
