@@ -8,6 +8,7 @@ import Projects from '../pages/public/Projects';
 import ProjectDetail from '../pages/public/ProjectDetail';
 import Services from '../pages/public/Services';
 import Contact from '../pages/public/Contact';
+import NotFound from '../pages/public/NotFound';
 import Login from '../pages/admin/Login';
 import Dashboard from '../pages/admin/Dashboard';
 import ManageProjects from '../pages/admin/ManageProjects';
@@ -27,6 +28,7 @@ const AppRoutes = () => (
       <Route path="/projects/:slug" element={<ProjectDetail />} />
       <Route path="/services" element={<Services />} />
       <Route path="/contact" element={<Contact />} />
+      <Route path="*" element={<NotFound />} />
     </Route>
 
     <Route path="/admin/login" element={<Login />} />

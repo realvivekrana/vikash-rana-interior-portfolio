@@ -5,7 +5,7 @@ import { protect } from '../middleware/authMiddleware.js';
 import upload from '../middleware/upload.js';
 
 const router = Router();
-const ctrl = makeSingletonController(Settings, ['logo']);
+const ctrl = makeSingletonController(Settings, ['logo'], ['siteName', 'tagline', 'workingHours', 'phone', 'whatsapp', 'email', 'address', 'mapEmbed', 'socialLinks', 'seo']);
 
 router.get('/', ctrl.get);
 router.put('/', protect, upload.fields([{ name: 'logo', maxCount: 1 }]), ctrl.update);

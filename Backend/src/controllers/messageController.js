@@ -2,12 +2,26 @@ import Message from '../models/Message.js';
 
 // PUBLIC: contact form submit
 export const createMessage = async (req, res) => {
-  const { name, email, phone, subject, message } = req.body;
-  if (!name || !email || !message) {
+  const { name, email, phone, subject, message, website } = req.body;
+
+  // Honeypot: bots hidden "website" field bhar dete hain. Chupchap success dikha do.
+  if (website) return res.status(201).json({ success: true, message: 'Message sent successfully' });
+
+  if (!name?.trim() || !email?.trim() || !message?.trim()) {
     res.status(400);
     throw new Error('Name, email and message are required');
   }
-  await Message.create({ name, email, phone, subject, message });
+  if (!/^\S+@\S+\.\S+$/.test(email.trim())) {
+    res.status(400);
+    throw new Error('Please enter a valid email');
+  }
+  await Message.create({
+    name: name.trim(),
+    email: email.trim(),
+    phone: (phone || '').trim().slice(0, 30),
+    subject: (subject || '').trim().slice(0, 150),
+    message: message.trim(),
+  });
   res.status(201).json({ success: true, message: 'Message sent successfully' });
 };
 
@@ -37,4 +51,9 @@ export const deleteMessage = async (req, res) => {
   }
   await msg.deleteOne();
   res.json({ success: true, message: 'Message deleted' });
+};
+
+export const markAllRead = async (req, res) => {
+  await Message.updateMany({ isRead: false }, { isRead: true });
+  res.json({ success: true, message: 'All messages marked as read' });
 };

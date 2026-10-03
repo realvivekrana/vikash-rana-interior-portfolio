@@ -19,6 +19,7 @@ const ManageHero = () => {
       .then((res) => {
         const h = res.data.data;
         reset({
+          eyebrow: h.eyebrow,
           heading: h.heading,
           subheading: h.subheading,
           ctaText: h.ctaText,
@@ -51,6 +52,10 @@ const ManageHero = () => {
       <PageHeader title="Hero Section" subtitle="Home page ka sabse upar wala banner" />
 
       <form onSubmit={handleSubmit(onSubmit)} className="bg-surface border border-line p-6 md:p-8 space-y-5">
+        <div>
+          <label className={labelClass}>Small text above heading</label>
+          <input className={inputClass} placeholder="Interior Designer" {...register('eyebrow')} />
+        </div>
         <div>
           <label className={labelClass}>Heading</label>
           <input className={inputClass} {...register('heading')} />

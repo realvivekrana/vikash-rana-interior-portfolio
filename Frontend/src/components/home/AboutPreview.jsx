@@ -8,11 +8,16 @@ const AboutPreview = () => {
   if (loading || !about || (!about.bio && !about.photo?.url)) return null;
 
   return (
-    <section className="max-w-7xl mx-auto px-5 md:px-8 py-20 md:py-28 grid md:grid-cols-2 gap-12 items-center">
+    <section className="max-w-7xl mx-auto px-5 md:px-8 py-16 md:py-28 grid md:grid-cols-2 gap-12 items-center">
       <Reveal>
         <div className="relative">
           {about.photo?.url ? (
-            <img src={img(about.photo.url, 900)} alt={about.name} className="w-full aspect-[4/5] object-cover" />
+            <img
+              src={img(about.photo.url, 800)}
+              alt={about.name}
+              loading="lazy"
+              className="w-full aspect-[4/5] object-cover"
+            />
           ) : (
             <div className="w-full aspect-[4/5] bg-surface" />
           )}

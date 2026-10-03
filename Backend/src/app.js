@@ -16,10 +16,28 @@ import dashboardRoutes from './routes/dashboardRoutes.js';
 
 const app = express();
 
+// Render/Railway jaise hosts proxy ke peeche chalte hain (rate limit ke liye sahi IP chahiye)
+app.set('trust proxy', 1);
+
+// CLIENT_URL mein comma se alag kai URL de sakte ho
+const allowedOrigins = (process.env.CLIENT_URL || 'http://localhost:5173')
+  .split(',')
+  .map((u) => u.trim().replace(/\/$/, ''))
+  .filter(Boolean);
+
 app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
-app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
-app.use(express.json({ limit: '2mb' }));
-app.use(express.urlencoded({ extended: true }));
+app.use(
+  cors({
+    origin: (origin, cb) => {
+      // origin undefined = Postman / server-to-server
+      if (!origin || allowedOrigins.includes(origin.replace(/\/$/, ''))) return cb(null, true);
+      cb(new Error('Not allowed by CORS'));
+    },
+    credentials: true,
+  })
+);
+app.use(express.json({ limit: '1mb' }));
+app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 app.use(cookieParser());
 
 app.get('/api/health', (req, res) => {

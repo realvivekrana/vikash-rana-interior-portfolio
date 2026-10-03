@@ -10,7 +10,7 @@ const Dashboard = () => {
     api
       .get('/dashboard/stats')
       .then((res) => setStats(res.data.data))
-      .catch(() => setError('Stats load nahi hue. Backend chal raha hai?'));
+      .catch(() => setError('Could not load stats. Is the backend running?'));
   }, []);
 
   if (error) return <p className="text-red-400">{error}</p>;

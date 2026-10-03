@@ -1,18 +1,14 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import * as FaIcons from 'react-icons/fa';
-import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
+import { FaPlus, FaEdit, FaTrash, FaEye, FaEyeSlash } from 'react-icons/fa';
 import api from '../../api/axios';
 import { inputClass, labelClass, goldBtn, outlineBtn } from '../../utils/ui';
+import { SERVICE_ICONS, getServiceIcon } from '../../utils/icons';
 import PageHeader from '../../components/admin/PageHeader';
 import Modal from '../../components/admin/Modal';
 
-const ICONS = [
-  'FaPencilRuler', 'FaHome', 'FaCouch', 'FaPaintRoller', 'FaBed', 'FaUtensils',
-  'FaLightbulb', 'FaBuilding', 'FaTools', 'FaRulerCombined', 'FaDraftingCompass',
-  'FaHammer', 'FaPalette', 'FaCube', 'FaShoppingBag',
-];
+const ICONS = Object.keys(SERVICE_ICONS);
 
 const ServiceForm = ({ service, onClose, onSaved }) => {
   const isEdit = !!service;
@@ -60,7 +56,7 @@ const ServiceForm = ({ service, onClose, onSaved }) => {
         <label className={labelClass}>Icon</label>
         <div className="flex flex-wrap gap-2">
           {ICONS.map((name) => {
-            const Icon = FaIcons[name];
+            const Icon = SERVICE_ICONS[name];
             return (
               <button
                 type="button"
@@ -126,6 +122,16 @@ const ManageServices = () => {
     }
   };
 
+  const toggleActive = async (s) => {
+    try {
+      const { data } = await api.put(`/services/${s._id}`, { isActive: !s.isActive });
+      setItems((list) => list.map((i) => (i._id === s._id ? data.data : i)));
+      toast.success(data.data.isActive ? 'Service visible' : 'Service hidden');
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Update nahi hua');
+    }
+  };
+
   const close = () => setModal(null);
 
   return (
@@ -145,9 +151,9 @@ const ManageServices = () => {
       ) : (
         <div className="bg-surface border border-line divide-y divide-line">
           {items.map((s) => {
-            const Icon = FaIcons[s.icon] || FaIcons.FaPencilRuler;
+            const Icon = getServiceIcon(s.icon);
             return (
-              <div key={s._id} className="p-5 flex items-center gap-4">
+              <div key={s._id} className="p-4 sm:p-5 flex items-center gap-3 sm:gap-4">
                 <div className="h-12 w-12 shrink-0 flex items-center justify-center border border-gold/40 text-gold text-xl">
                   <Icon />
                 </div>
@@ -162,15 +168,23 @@ const ManageServices = () => {
                 </div>
                 <div className="flex gap-2 shrink-0">
                   <button
+                    onClick={() => toggleActive(s)}
+                    className="h-11 w-11 flex items-center justify-center border border-line text-neutral-300 hover:border-gold hover:text-gold"
+                    aria-label={s.isActive ? 'Hide' : 'Show'}
+                    title={s.isActive ? 'Visible on site' : 'Hidden'}
+                  >
+                    {s.isActive ? <FaEye /> : <FaEyeSlash />}
+                  </button>
+                  <button
                     onClick={() => setModal(s)}
-                    className="h-9 w-9 flex items-center justify-center border border-line text-neutral-300 hover:border-gold hover:text-gold"
+                    className="h-11 w-11 flex items-center justify-center border border-line text-neutral-300 hover:border-gold hover:text-gold"
                     aria-label="Edit"
                   >
                     <FaEdit />
                   </button>
                   <button
                     onClick={() => remove(s)}
-                    className="h-9 w-9 flex items-center justify-center border border-line text-neutral-300 hover:border-red-500 hover:text-red-400"
+                    className="h-11 w-11 flex items-center justify-center border border-line text-neutral-300 hover:border-red-500 hover:text-red-400"
                     aria-label="Delete"
                   >
                     <FaTrash />

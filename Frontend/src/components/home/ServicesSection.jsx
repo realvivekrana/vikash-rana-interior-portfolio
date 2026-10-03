@@ -10,7 +10,7 @@ const ServicesSection = () => {
 
   return (
     <section className="bg-surface/50 border-y border-line">
-      <div className="max-w-7xl mx-auto px-5 md:px-8 py-20 md:py-28">
+      <div className="max-w-7xl mx-auto px-5 md:px-8 py-16 md:py-28">
         <SectionTitle eyebrow="What We Do" title="Our Services" />
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.slice(0, 6).map((s, i) => (

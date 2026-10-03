@@ -9,7 +9,7 @@ const imageSchema = new mongoose.Schema(
 const projectSchema = new mongoose.Schema(
   {
     title: { type: String, required: true, trim: true },
-    slug: { type: String, unique: true, index: true },
+    slug: { type: String, unique: true },
     category: { type: String, required: true, trim: true }, // Living Room, Bedroom, Kitchen...
     description: { type: String, default: '' },
     location: { type: String, default: '' },

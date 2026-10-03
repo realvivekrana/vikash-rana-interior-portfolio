@@ -28,6 +28,8 @@ const SiteSettings = () => {
         const s = res.data.data;
         reset({
           siteName: s.siteName,
+          tagline: s.tagline,
+          workingHours: s.workingHours,
           phone: s.phone,
           whatsapp: s.whatsapp,
           email: s.email,
@@ -44,7 +46,7 @@ const SiteSettings = () => {
 
   const onSubmit = async (v) => {
     const fd = new FormData();
-    ['siteName', 'phone', 'whatsapp', 'email', 'address'].forEach((k) => fd.append(k, v[k] ?? ''));
+    ['siteName', 'tagline', 'workingHours', 'phone', 'whatsapp', 'email', 'address'].forEach((k) => fd.append(k, v[k] ?? ''));
     fd.append('mapEmbed', extractSrc(v.mapEmbed));
     fd.append('socialLinks', JSON.stringify(v.socialLinks || {}));
     fd.append('seo', JSON.stringify(v.seo || {}));
@@ -72,6 +74,10 @@ const SiteSettings = () => {
           <label className={labelClass}>Site name</label>
           <input className={inputClass} {...register('siteName')} />
         </div>
+        <div>
+          <label className={labelClass}>Footer tagline</label>
+          <textarea rows={2} className={inputClass} {...register('tagline')} />
+        </div>
         <ImageInput
           label="Logo (optional, na ho to site name text dikhega)"
           file={logo}
@@ -95,6 +101,10 @@ const SiteSettings = () => {
         <div>
           <label className={labelClass}>Email</label>
           <input type="email" className={inputClass} {...register('email')} />
+        </div>
+        <div>
+          <label className={labelClass}>Working hours</label>
+          <textarea rows={2} className={inputClass} placeholder={'Mon - Sat: 10 AM - 7 PM'} {...register('workingHours')} />
         </div>
         <div>
           <label className={labelClass}>Address</label>

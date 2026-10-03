@@ -8,9 +8,17 @@ const Hero = () => {
   const bg = hero?.backgroundImage?.url;
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-[100svh] flex items-center justify-center overflow-hidden pt-24 pb-16">
       {bg ? (
-        <img src={img(bg, 2000)} alt="" className="absolute inset-0 h-full w-full object-cover" />
+        <img
+          src={img(bg, 1400)}
+          srcSet={`${img(bg, 640)} 640w, ${img(bg, 1000)} 1000w, ${img(bg, 1400)} 1400w, ${img(bg, 2000)} 2000w`}
+          sizes="100vw"
+          alt=""
+          fetchPriority="high"
+          decoding="async"
+          className="absolute inset-0 h-full w-full object-cover"
+        />
       ) : (
         <div className="absolute inset-0 bg-gradient-to-br from-surface via-ink to-black" />
       )}
@@ -22,15 +30,15 @@ const Hero = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-gold tracking-[0.5em] text-xs uppercase mb-6"
+            className="text-gold tracking-[0.35em] sm:tracking-[0.5em] text-[11px] sm:text-xs uppercase mb-5 sm:mb-6"
           >
-            Interior Designer
+            {hero.eyebrow || 'Interior Designer'}
           </motion.p>
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.15 }}
-            className="font-serif text-4xl sm:text-5xl md:text-7xl text-white leading-tight"
+            className="font-serif text-[2rem] leading-[1.15] sm:text-5xl md:text-7xl text-white sm:leading-tight"
           >
             {hero.heading}
           </motion.h1>
@@ -55,7 +63,7 @@ const Hero = () => {
           >
             <Link
               to={hero.ctaLink || '/projects'}
-              className="inline-block mt-10 border border-gold text-gold hover:bg-gold hover:text-black px-9 py-3.5 text-xs uppercase tracking-[0.25em] transition-colors"
+              className="inline-flex items-center justify-center min-h-12 mt-9 sm:mt-10 border border-gold text-gold hover:bg-gold hover:text-black px-9 text-xs uppercase tracking-[0.25em] transition-colors"
             >
               {hero.ctaText || 'View Projects'}
             </Link>

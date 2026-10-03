@@ -30,12 +30,17 @@ const AdminLayout = () => {
   return (
     <div className="min-h-screen bg-ink">
       {/* Mobile top bar */}
-      <div className="lg:hidden flex items-center justify-between px-4 h-14 bg-surface border-b border-line">
+      <div className="lg:hidden sticky top-0 z-50 flex items-center justify-between pl-4 pr-1 h-14 bg-surface border-b border-line">
         <span className="font-serif text-gold text-lg">Admin Panel</span>
-        <button onClick={() => setOpen(!open)} className="text-white text-xl">
+        <button onClick={() => setOpen(!open)} className="h-11 w-11 flex items-center justify-center text-white text-xl" aria-label="Menu" aria-expanded={open}>
           {open ? <FaTimes /> : <FaBars />}
         </button>
       </div>
+
+      {/* Mobile menu ke peeche dim backdrop */}
+      {open && (
+        <div className="lg:hidden fixed inset-0 top-14 z-30 bg-black/60" onClick={() => setOpen(false)} />
+      )}
 
       {/* Sidebar */}
       <aside
@@ -55,7 +60,7 @@ const AdminLayout = () => {
               end={end}
               onClick={() => setOpen(false)}
               className={({ isActive }) =>
-                `flex items-center gap-3 px-6 py-3 text-sm transition-colors border-l-2 ${
+                `flex items-center gap-3 px-6 min-h-12 text-sm transition-colors border-l-2 ${
                   isActive
                     ? 'border-gold text-gold bg-gold/5'
                     : 'border-transparent text-neutral-400 hover:text-white hover:bg-white/5'
@@ -72,7 +77,7 @@ const AdminLayout = () => {
           <p className="text-xs text-neutral-500 truncate mb-3 px-2">{admin?.email}</p>
           <button
             onClick={handleLogout}
-            className="w-full flex items-center justify-center gap-2 py-2.5 text-sm border border-line text-neutral-300 hover:border-gold hover:text-gold transition-colors"
+            className="w-full flex items-center justify-center gap-2 min-h-11 text-sm border border-line text-neutral-300 hover:border-gold hover:text-gold transition-colors"
           >
             <FaSignOutAlt /> Logout
           </button>
@@ -80,7 +85,7 @@ const AdminLayout = () => {
       </aside>
 
       {/* Content */}
-      <main className="lg:ml-64 p-5 md:p-8">
+      <main className="lg:ml-64 p-4 sm:p-5 md:p-8 pb-16">
         <Outlet />
       </main>
     </div>

@@ -4,6 +4,11 @@ const settingsSchema = new mongoose.Schema(
   {
     siteName: { type: String, default: 'Vikash Rana Interiors' },
     logo: { url: String, public_id: String },
+    tagline: {
+      type: String,
+      default: 'Crafting timeless interiors that reflect your personality and elevate everyday living.',
+    },
+    workingHours: { type: String, default: '' },
     phone: { type: String, default: '' },
     whatsapp: { type: String, default: '' },
     email: { type: String, default: '' },

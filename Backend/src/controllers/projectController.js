@@ -1,5 +1,11 @@
 import Project from '../models/Project.js';
 import deleteImage from '../utils/deleteImage.js';
+import pick from '../utils/pick.js';
+
+const FIELDS = [
+  'title', 'category', 'description', 'location', 'area',
+  'year', 'client', 'featured', 'isPublished', 'order',
+];
 
 const toImage = (file) => ({ url: file.path, public_id: file.filename });
 
@@ -44,14 +50,21 @@ export const getProjectById = async (req, res) => {
 };
 
 export const createProject = async (req, res) => {
-  const body = { ...req.body };
+  const body = pick(req.body, FIELDS);
   if (req.files?.coverImage?.[0]) body.coverImage = toImage(req.files.coverImage[0]);
   if (req.files?.images) body.images = req.files.images.map(toImage);
 
   if (!body.coverImage && body.images?.length) body.coverImage = body.images[0];
 
-  const project = await Project.create(body);
-  res.status(201).json({ success: true, data: project });
+  try {
+    const project = await Project.create(body);
+    res.status(201).json({ success: true, data: project });
+  } catch (err) {
+    // Save fail hua to upload ho chuki images Cloudinary se hata do
+    const ids = new Set([body.coverImage?.public_id, ...(body.images || []).map((i) => i.public_id)]);
+    for (const id of ids) await deleteImage(id);
+    throw err;
+  }
 };
 
 export const updateProject = async (req, res) => {
@@ -61,25 +74,42 @@ export const updateProject = async (req, res) => {
     throw new Error('Project not found');
   }
 
-  const { removeImages, ...fields } = req.body;
-  Object.assign(project, fields);
+  Object.assign(project, pick(req.body, FIELDS));
 
   // Gallery se chuni hui images hatao (removeImages = JSON array of public_ids)
-  if (removeImages) {
-    const ids = JSON.parse(removeImages);
-    for (const id of ids) await deleteImage(id);
-    project.images = project.images.filter((img) => !ids.includes(img.public_id));
+  let removeIds = [];
+  if (req.body.removeImages) {
+    try {
+      removeIds = JSON.parse(req.body.removeImages);
+    } catch {
+      removeIds = [];
+    }
+    project.images = project.images.filter((img) => !removeIds.includes(img.public_id));
   }
 
+  const oldCoverId = project.coverImage?.public_id;
+  const newUploads = [];
   if (req.files?.coverImage?.[0]) {
-    await deleteImage(project.coverImage?.public_id);
     project.coverImage = toImage(req.files.coverImage[0]);
+    newUploads.push(project.coverImage.public_id);
   }
   if (req.files?.images) {
-    project.images.push(...req.files.images.map(toImage));
+    const added = req.files.images.map(toImage);
+    project.images.push(...added);
+    newUploads.push(...added.map((i) => i.public_id));
   }
 
-  await project.save();
+  try {
+    await project.save();
+  } catch (err) {
+    for (const id of newUploads) await deleteImage(id);
+    throw err;
+  }
+
+  // Save safal hone ke baad hi purani images Cloudinary se hatao
+  for (const id of removeIds) await deleteImage(id);
+  if (req.files?.coverImage?.[0] && oldCoverId) await deleteImage(oldCoverId);
+
   res.json({ success: true, data: project });
 };
 

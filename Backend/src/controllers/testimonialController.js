@@ -1,5 +1,8 @@
 import Testimonial from '../models/Testimonial.js';
 import deleteImage from '../utils/deleteImage.js';
+import pick from '../utils/pick.js';
+
+const FIELDS = ['name', 'designation', 'message', 'rating', 'isActive'];
 
 export const getTestimonials = async (req, res) => {
   const data = await Testimonial.find({ isActive: true }).sort({ createdAt: -1 });
@@ -12,10 +15,15 @@ export const getTestimonialsAdmin = async (req, res) => {
 };
 
 export const createTestimonial = async (req, res) => {
-  const body = { ...req.body };
+  const body = pick(req.body, FIELDS);
   if (req.file) body.image = { url: req.file.path, public_id: req.file.filename };
-  const data = await Testimonial.create(body);
-  res.status(201).json({ success: true, data });
+  try {
+    const data = await Testimonial.create(body);
+    res.status(201).json({ success: true, data });
+  } catch (err) {
+    if (req.file) await deleteImage(req.file.filename);
+    throw err;
+  }
 };
 
 export const updateTestimonial = async (req, res) => {
@@ -24,12 +32,16 @@ export const updateTestimonial = async (req, res) => {
     res.status(404);
     throw new Error('Testimonial not found');
   }
-  Object.assign(item, req.body);
-  if (req.file) {
-    await deleteImage(item.image?.public_id);
-    item.image = { url: req.file.path, public_id: req.file.filename };
+  Object.assign(item, pick(req.body, FIELDS));
+  const oldId = item.image?.public_id;
+  if (req.file) item.image = { url: req.file.path, public_id: req.file.filename };
+  try {
+    await item.save();
+  } catch (err) {
+    if (req.file) await deleteImage(req.file.filename);
+    throw err;
   }
-  await item.save();
+  if (req.file) await deleteImage(oldId);
   res.json({ success: true, data: item });
 };
 

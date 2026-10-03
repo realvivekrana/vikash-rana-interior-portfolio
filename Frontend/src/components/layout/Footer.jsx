@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import {
   FaInstagram, FaFacebookF, FaLinkedinIn, FaYoutube, FaPinterestP,
-  FaPhoneAlt, FaEnvelope, FaMapMarkerAlt, FaWhatsapp,
+  FaPhoneAlt, FaEnvelope, FaMapMarkerAlt, FaWhatsapp, FaClock,
 } from 'react-icons/fa';
 import { useSite } from '../../context/SiteContext';
 
@@ -19,13 +19,13 @@ const Footer = () => {
 
   return (
     <>
-      <footer className="bg-surface border-t border-line mt-24">
+      <footer className="bg-surface border-t border-line mt-16 md:mt-24">
         <div className="max-w-7xl mx-auto px-5 md:px-8 py-14 grid gap-10 md:grid-cols-3">
           <div>
             <h3 className="font-serif text-2xl text-white mb-3">{s?.siteName || 'Vikash Rana Interiors'}</h3>
             <div className="w-10 h-px bg-gold mb-4" />
             <p className="text-neutral-400 text-sm leading-relaxed max-w-xs">
-              Crafting timeless interiors that reflect your personality and elevate everyday living.
+              {s?.tagline || 'Crafting timeless interiors that reflect your personality and elevate everyday living.'}
             </p>
             <div className="flex gap-3 mt-6">
               {socials.map(([key, Icon]) =>
@@ -35,7 +35,8 @@ const Footer = () => {
                     href={s.socialLinks[key]}
                     target="_blank"
                     rel="noreferrer"
-                    className="h-9 w-9 flex items-center justify-center border border-line text-neutral-300 hover:border-gold hover:text-gold transition-colors"
+                    aria-label={key}
+                    className="h-11 w-11 flex items-center justify-center border border-line text-neutral-300 hover:border-gold hover:text-gold transition-colors"
                   >
                     <Icon />
                   </a>
@@ -50,7 +51,7 @@ const Footer = () => {
               {[['/', 'Home'], ['/projects', 'Projects'], ['/services', 'Services'], ['/about', 'About'], ['/contact', 'Contact']].map(
                 ([to, label]) => (
                   <li key={to}>
-                    <Link to={to} className="hover:text-gold transition-colors">{label}</Link>
+                    <Link to={to} className="hover:text-gold transition-colors inline-block py-1">{label}</Link>
                   </li>
                 )
               )}
@@ -61,19 +62,28 @@ const Footer = () => {
             <h4 className="text-gold text-xs uppercase tracking-[0.3em] mb-5">Contact</h4>
             <ul className="space-y-3 text-sm text-neutral-400">
               {s?.phone && (
-                <li className="flex gap-3"><FaPhoneAlt className="text-gold mt-1 shrink-0" />{s.phone}</li>
+                <li className="flex gap-3">
+                  <FaPhoneAlt className="text-gold mt-1 shrink-0" />
+                  <a href={`tel:${s.phone.replace(/[^\d+]/g, '')}`} className="hover:text-gold">{s.phone}</a>
+                </li>
               )}
               {s?.email && (
-                <li className="flex gap-3"><FaEnvelope className="text-gold mt-1 shrink-0" />{s.email}</li>
+                <li className="flex gap-3">
+                  <FaEnvelope className="text-gold mt-1 shrink-0" />
+                  <a href={`mailto:${s.email}`} className="hover:text-gold break-all">{s.email}</a>
+                </li>
               )}
               {s?.address && (
                 <li className="flex gap-3"><FaMapMarkerAlt className="text-gold mt-1 shrink-0" />{s.address}</li>
+              )}
+              {s?.workingHours && (
+                <li className="flex gap-3"><FaClock className="text-gold mt-1 shrink-0" /><span className="whitespace-pre-line">{s.workingHours}</span></li>
               )}
             </ul>
           </div>
         </div>
 
-        <div className="border-t border-line py-5 px-5 flex flex-col sm:flex-row items-center justify-center gap-3 text-xs text-neutral-600">
+        <div className="border-t border-line py-5 px-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))] flex flex-col sm:flex-row items-center justify-center gap-3 text-xs text-neutral-600">
           <span>© {new Date().getFullYear()} {s?.siteName || 'Vikash Rana Interiors'}. All rights reserved.</span>
           <span className="hidden sm:inline text-neutral-800">|</span>
           <Link to="/admin" className="hover:text-gold transition-colors">Admin Login</Link>
@@ -86,7 +96,7 @@ const Footer = () => {
           target="_blank"
           rel="noreferrer"
           aria-label="Chat on WhatsApp"
-          className="fixed bottom-5 right-5 z-40 h-13 w-13 p-3.5 rounded-full bg-[#25D366] text-white text-2xl shadow-lg hover:scale-110 transition-transform"
+          className="fixed right-4 bottom-[calc(1rem+env(safe-area-inset-bottom))] sm:right-5 sm:bottom-5 z-40 h-14 w-14 flex items-center justify-center rounded-full bg-[#25D366] text-white text-2xl shadow-lg hover:scale-110 transition-transform"
         >
           <FaWhatsapp />
         </a>

@@ -20,15 +20,15 @@ const Login = () => {
       toast.success('Welcome back!');
       navigate('/admin');
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Login failed. Server chal raha hai?');
+      toast.error(err.response?.data?.message || 'Login failed. Is the server running?');
     }
   };
 
   const inputClass =
-    'w-full bg-ink border border-line px-4 py-3 text-white placeholder-neutral-600 focus:outline-none focus:border-gold transition-colors';
+    'w-full bg-ink border border-line px-4 py-3 min-h-12 text-base text-white placeholder-neutral-600 focus:outline-none focus:border-gold transition-colors';
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-5 bg-ink">
+    <div className="min-h-[100svh] flex items-center justify-center px-5 bg-ink">
       <div className="w-full max-w-md bg-surface border border-line p-8 md:p-10">
         <div className="text-center mb-8">
           <p className="text-gold tracking-[0.35em] text-[10px] uppercase mb-3">Admin Panel</p>
@@ -41,6 +41,8 @@ const Login = () => {
             <label className="block text-xs uppercase tracking-wider text-neutral-400 mb-2">Email</label>
             <input
               type="email"
+              autoComplete="username"
+              inputMode="email"
               placeholder="admin@example.com"
               className={inputClass}
               {...register('email', { required: 'Email is required' })}
@@ -52,6 +54,7 @@ const Login = () => {
             <label className="block text-xs uppercase tracking-wider text-neutral-400 mb-2">Password</label>
             <input
               type="password"
+              autoComplete="current-password"
               placeholder="••••••••"
               className={inputClass}
               {...register('password', { required: 'Password is required' })}
@@ -62,7 +65,7 @@ const Login = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-gold hover:bg-gold-light text-black font-medium py-3 tracking-wider uppercase text-sm transition-colors disabled:opacity-60"
+            className="w-full bg-gold hover:bg-gold-light text-black font-medium min-h-12 tracking-wider uppercase text-sm transition-colors disabled:opacity-60"
           >
             {isSubmitting ? 'Signing in...' : 'Sign In'}
           </button>

@@ -14,20 +14,20 @@ const AdminBar = () => {
   };
 
   return (
-    <div className="fixed bottom-5 left-5 z-40 flex items-center gap-1 bg-surface/95 backdrop-blur border border-gold/50 shadow-lg text-xs">
+    <div className="fixed left-3 bottom-[calc(1rem+env(safe-area-inset-bottom))] sm:left-5 sm:bottom-5 z-40 flex items-center gap-1 bg-surface/95 backdrop-blur border border-gold/50 shadow-lg text-xs">
       <span className="flex items-center gap-2 pl-3 pr-2 py-2 text-gold">
         <FaUserShield />
         <span className="hidden sm:inline uppercase tracking-wider">Admin</span>
       </span>
       <Link
         to="/admin"
-        className="flex items-center gap-2 px-3 py-2 text-neutral-300 hover:text-gold border-l border-line transition-colors"
+        className="flex items-center gap-2 px-3 min-h-11 text-neutral-300 hover:text-gold border-l border-line transition-colors"
       >
         <FaThLarge /> Dashboard
       </Link>
       <button
         onClick={handleLogout}
-        className="flex items-center gap-2 px-3 py-2 text-neutral-300 hover:text-red-400 border-l border-line transition-colors"
+        className="flex items-center gap-2 px-3 min-h-11 text-neutral-300 hover:text-red-400 border-l border-line transition-colors"
       >
         <FaSignOutAlt /> Logout
       </button>

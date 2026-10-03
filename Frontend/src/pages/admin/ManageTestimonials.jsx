@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { FaPlus, FaEdit, FaTrash, FaStar, FaUser } from 'react-icons/fa';
+import { FaPlus, FaEdit, FaTrash, FaStar, FaUser, FaEye, FaEyeSlash } from 'react-icons/fa';
 import api from '../../api/axios';
 import { img } from '../../utils/img';
 import { inputClass, labelClass, goldBtn, outlineBtn } from '../../utils/ui';
@@ -120,6 +120,16 @@ const ManageTestimonials = () => {
     }
   };
 
+  const toggleActive = async (t) => {
+    try {
+      const { data } = await api.put(`/testimonials/${t._id}`, { isActive: !t.isActive });
+      setItems((list) => list.map((i) => (i._id === t._id ? data.data : i)));
+      toast.success(data.data.isActive ? 'Testimonial visible' : 'Testimonial hidden');
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Update nahi hua');
+    }
+  };
+
   const close = () => setModal(null);
 
   return (
@@ -162,16 +172,22 @@ const ManageTestimonials = () => {
                 </div>
               </div>
               <p className="text-neutral-400 text-sm line-clamp-3">{t.message}</p>
-              <div className="flex gap-2 mt-4">
+              <div className="flex flex-wrap gap-2 mt-4">
+                <button
+                  onClick={() => toggleActive(t)}
+                  className="h-11 px-4 flex items-center gap-2 border border-line text-xs text-neutral-300 hover:border-gold hover:text-gold"
+                >
+                  {t.isActive ? <><FaEye /> Visible</> : <><FaEyeSlash /> Hidden</>}
+                </button>
                 <button
                   onClick={() => setModal(t)}
-                  className="h-9 px-4 flex items-center gap-2 border border-line text-xs text-neutral-300 hover:border-gold hover:text-gold"
+                  className="h-11 px-4 flex items-center gap-2 border border-line text-xs text-neutral-300 hover:border-gold hover:text-gold"
                 >
                   <FaEdit /> Edit
                 </button>
                 <button
                   onClick={() => remove(t)}
-                  className="h-9 px-4 flex items-center gap-2 border border-line text-xs text-neutral-300 hover:border-red-500 hover:text-red-400"
+                  className="h-11 px-4 flex items-center gap-2 border border-line text-xs text-neutral-300 hover:border-red-500 hover:text-red-400"
                 >
                   <FaTrash /> Delete
                 </button>

@@ -2,6 +2,7 @@ import axios from 'axios';
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
+  timeout: 60000, // free hosting par server jagne mein ~1 min lag sakta hai
 });
 
 api.interceptors.request.use((config) => {

@@ -11,8 +11,6 @@ export const SiteProvider = ({ children }) => {
       .get('/settings')
       .then((res) => {
         setSettings(res.data.data);
-        const title = res.data.data?.seo?.title;
-        if (title) document.title = title;
       })
       .catch(() => {});
   }, []);
