@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { useAuth } from '../../context/AuthContext';
@@ -6,6 +8,7 @@ import { useAuth } from '../../context/AuthContext';
 const Login = () => {
   const { admin, login } = useAuth();
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
   const {
     register,
     handleSubmit,
@@ -52,13 +55,24 @@ const Login = () => {
 
           <div>
             <label className="block text-xs uppercase tracking-wider text-neutral-400 mb-2">Password</label>
-            <input
-              type="password"
-              autoComplete="current-password"
-              placeholder="••••••••"
-              className={inputClass}
-              {...register('password', { required: 'Password is required' })}
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                autoComplete="current-password"
+                placeholder="••••••••"
+                className={`${inputClass} pr-12`}
+                {...register('password', { required: 'Password is required' })}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((v) => !v)}
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+                aria-pressed={showPassword}
+                className="absolute inset-y-0 right-0 w-12 flex items-center justify-center text-neutral-500 hover:text-gold transition-colors"
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
             {errors.password && <p className="text-red-400 text-xs mt-1">{errors.password.message}</p>}
           </div>
 
