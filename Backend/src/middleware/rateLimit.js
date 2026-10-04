@@ -43,4 +43,11 @@ export const trackLimiter = rateLimit({
   message: 'Too many tracking requests.',
 });
 
+// AI free tier limited hai, isliye ek IP se thode hi requests
+export const aiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 12,
+  message: 'You have used the AI tools a lot. Please try again in a few minutes.',
+});
+
 export default rateLimit;

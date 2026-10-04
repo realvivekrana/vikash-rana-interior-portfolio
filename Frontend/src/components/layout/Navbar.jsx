@@ -6,6 +6,8 @@ import { useSite } from '../../context/SiteContext';
 const links = [
   { to: '/', label: 'Home' },
   { to: '/projects', label: 'Projects' },
+  { to: '/gallery', label: 'Gallery' },
+  { to: '/ai-tools', label: 'AI Tools' },
   { to: '/services', label: 'Services' },
   { to: '/skills', label: 'Skills' },
   { to: '/resume', label: 'Resume' },
@@ -66,14 +68,14 @@ const Navbar = () => {
           )}
         </Link>
 
-        <nav className="hidden lg:flex items-center gap-5 xl:gap-8" aria-label="Main">
+        <nav className="hidden xl:flex items-center gap-5 2xl:gap-8" aria-label="Main">
           {links.map(({ to, label }) => (
             <NavLink
               key={to}
               to={to}
               end={to === '/'}
               className={({ isActive }) =>
-                `text-[11px] xl:text-xs uppercase tracking-[0.15em] xl:tracking-[0.2em] pb-1 border-b transition-colors whitespace-nowrap ${
+                `text-xs uppercase tracking-[0.15em] 2xl:tracking-[0.2em] pb-1 border-b transition-colors whitespace-nowrap ${
                   isActive
                     ? 'text-gold border-gold'
                     : 'text-neutral-300 border-transparent hover:text-gold'
@@ -87,7 +89,7 @@ const Navbar = () => {
 
         <button
           onClick={() => setOpen(!open)}
-          className="lg:hidden h-11 w-11 -mr-2 flex items-center justify-center text-white text-xl"
+          className="xl:hidden h-11 w-11 -mr-2 flex items-center justify-center text-white text-xl"
           aria-label={open ? 'Close menu' : 'Open menu'}
           aria-expanded={open}
         >
@@ -97,7 +99,7 @@ const Navbar = () => {
 
       {open && (
         <nav
-          className="lg:hidden bg-ink border-t border-line px-5 pb-[calc(1.5rem+env(safe-area-inset-bottom))] flex flex-col h-[calc(100dvh-4rem)] overflow-y-auto"
+          className="xl:hidden bg-ink border-t border-line px-5 pb-[calc(1.5rem+env(safe-area-inset-bottom))] flex flex-col h-[calc(100dvh-4rem)] overflow-y-auto"
           aria-label="Mobile"
         >
           {links.map(({ to, label }) => (

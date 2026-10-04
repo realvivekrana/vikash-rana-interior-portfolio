@@ -3,13 +3,15 @@ import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import {
   FaThLarge, FaImages, FaConciergeBell, FaQuoteLeft, FaImage,
   FaUser, FaEnvelope, FaCog, FaSignOutAlt, FaBars, FaTimes,
-  FaTasks, FaFilePdf, FaChartLine,
+  FaTasks, FaFilePdf, FaChartLine, FaPhotoVideo, FaRobot,
 } from 'react-icons/fa';
 import { useAuth } from '../context/AuthContext';
 
 const links = [
   { to: '/admin', label: 'Dashboard', icon: FaThLarge, end: true },
   { to: '/admin/projects', label: 'Projects', icon: FaImages },
+  { to: '/admin/gallery', label: 'Gallery', icon: FaPhotoVideo },
+  { to: '/admin/ai-tools', label: 'AI Tools', icon: FaRobot },
   { to: '/admin/services', label: 'Services', icon: FaConciergeBell },
   { to: '/admin/skills', label: 'Skills', icon: FaTasks },
   { to: '/admin/documents', label: 'Resume & PDFs', icon: FaFilePdf },

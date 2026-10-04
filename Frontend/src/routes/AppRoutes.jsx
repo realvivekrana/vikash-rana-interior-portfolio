@@ -5,6 +5,8 @@ import AdminLayout from '../layouts/AdminLayout';
 import Home from '../pages/public/Home';
 import About from '../pages/public/About';
 import Projects from '../pages/public/Projects';
+import Gallery from '../pages/public/Gallery';
+import AiTools from '../pages/public/AiTools';
 import ProjectDetail from '../pages/public/ProjectDetail';
 import Services from '../pages/public/Services';
 import Contact from '../pages/public/Contact';
@@ -24,6 +26,8 @@ import Settings from '../pages/admin/Settings';
 import ManageSkills from '../pages/admin/ManageSkills';
 import ManageDocuments from '../pages/admin/ManageDocuments';
 import ActivityMonitor from '../pages/admin/ActivityMonitor';
+import ManageGallery from '../pages/admin/ManageGallery';
+import ManageAiTools from '../pages/admin/ManageAiTools';
 
 const AppRoutes = () => (
   <Routes>
@@ -32,6 +36,8 @@ const AppRoutes = () => (
       <Route path="/about" element={<About />} />
       <Route path="/projects" element={<Projects />} />
       <Route path="/projects/:slug" element={<ProjectDetail />} />
+      <Route path="/gallery" element={<Gallery />} />
+      <Route path="/ai-tools" element={<AiTools />} />
       <Route path="/services" element={<Services />} />
       <Route path="/skills" element={<Skills />} />
       <Route path="/resume" element={<Resume />} />
@@ -52,6 +58,8 @@ const AppRoutes = () => (
     >
       <Route index element={<Dashboard />} />
       <Route path="projects" element={<ManageProjects />} />
+      <Route path="gallery" element={<ManageGallery />} />
+      <Route path="ai-tools" element={<ManageAiTools />} />
       <Route path="services" element={<ManageServices />} />
       <Route path="testimonials" element={<ManageTestimonials />} />
       <Route path="hero" element={<ManageHero />} />

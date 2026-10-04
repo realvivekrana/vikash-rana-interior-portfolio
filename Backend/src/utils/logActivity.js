@@ -24,6 +24,8 @@ const ENTITIES = {
   messages: 'Message',
   skills: 'Skill',
   documents: 'Document',
+  gallery: 'Gallery photo',
+  'ai-tools': 'AI tool',
   auth: 'Account',
 };
 
@@ -64,7 +66,9 @@ export const auditMiddleware = (req, res, next) => {
     } else {
       const noun = entity.toLowerCase();
       const verb = action === 'created' ? 'Added' : action === 'deleted' ? 'Deleted' : 'Updated';
-      label = name ? `${verb} ${noun}: ${name}` : `${verb} ${noun}`;
+      // Bulk upload/delete: "Added 5 gallery photos"
+      const n = Array.isArray(d) ? d.length : payload?.count;
+      label = n > 1 ? `${verb} ${n} ${noun}s` : name ? `${verb} ${noun}: ${name}` : `${verb} ${noun}`;
     }
 
     logActivity(req, {

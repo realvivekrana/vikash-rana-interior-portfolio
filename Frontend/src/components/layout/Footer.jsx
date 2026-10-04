@@ -18,6 +18,8 @@ const socials = [
 const quickLinks = [
   ['/', 'Home'],
   ['/projects', 'Projects'],
+  ['/gallery', 'Gallery'],
+  ['/ai-tools', 'AI Tools'],
   ['/services', 'Services'],
   ['/skills', 'Skills'],
   ['/resume', 'Resume'],
@@ -96,7 +98,7 @@ const Footer = () => {
           {/* Quick links: 2 columns on mobile/tablet, single list on desktop */}
           <nav className="min-w-0" aria-label="Footer">
             <h4 className={headingClass}>Quick Links</h4>
-            <ul className="grid grid-cols-2 gap-x-6 lg:gap-x-10 lg:grid-flow-col lg:grid-rows-4 text-sm text-neutral-400">
+            <ul className="grid grid-cols-2 gap-x-6 lg:gap-x-10 lg:grid-flow-col lg:grid-rows-5 text-sm text-neutral-400">
               {quickLinks.map(([to, label]) => (
                 <li key={to}>
                   <Link to={to} className={`${linkClass} flex items-center min-h-11 lg:min-h-10`}>
