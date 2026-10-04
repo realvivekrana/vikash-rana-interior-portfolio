@@ -35,14 +35,14 @@ const DocumentForm = ({ doc, onClose, onSaved }) => {
     const f = e.target.files[0];
     e.target.value = '';
     if (!f) return;
-    if (f.type !== 'application/pdf') return setFileError('Sirf PDF file chalegi');
-    if (f.size > MAX_MB * 1024 * 1024) return setFileError(`PDF ${MAX_MB} MB se chhoti honi chahiye`);
+    if (f.type !== 'application/pdf') return setFileError('Only PDF files are allowed');
+    if (f.size > MAX_MB * 1024 * 1024) return setFileError(`PDF must be smaller than ${MAX_MB} MB`);
     setFileError('');
     setFile(f);
   };
 
   const onSubmit = async (v) => {
-    if (!isEdit && !file) return setFileError('PDF file chuno');
+    if (!isEdit && !file) return setFileError('Choose a PDF file');
     const fd = new FormData();
     fd.append('title', v.title);
     fd.append('type', v.type);
@@ -57,7 +57,7 @@ const DocumentForm = ({ doc, onClose, onSaved }) => {
       toast.success(isEdit ? 'Document updated' : 'Document uploaded');
       onSaved();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Save nahi hua');
+      toast.error(err.response?.data?.message || 'Could not save');
     }
   };
 
@@ -90,30 +90,30 @@ const DocumentForm = ({ doc, onClose, onSaved }) => {
       </div>
 
       <div>
-        <label className={labelClass}>PDF file {isEdit ? '(naya chuno to replace hogi)' : '*'}</label>
+        <label className={labelClass}>PDF file {isEdit ? '(choose a new one to replace it)' : '*'}</label>
         <div className="flex items-center gap-3 flex-wrap">
           <label className="cursor-pointer min-h-11 inline-flex items-center border border-line px-4 text-xs uppercase tracking-wider text-neutral-300 hover:border-gold hover:text-gold transition-colors">
             {file || isEdit ? 'Change' : 'Choose'} PDF
             <input type="file" accept="application/pdf" hidden onChange={pickFile} />
           </label>
           <span className="text-sm text-neutral-400 break-all min-w-0">
-            {file ? `${file.name} (${formatBytes(file.size)})` : isEdit ? doc.file?.originalName || 'Current file' : 'Koi file nahi chuni'}
+            {file ? `${file.name} (${formatBytes(file.size)})` : isEdit ? doc.file?.originalName || 'Current file' : 'No file chosen'}
           </span>
         </div>
         {fileError && <p className="text-red-400 text-xs mt-2">{fileError}</p>}
-        <p className="text-neutral-600 text-xs mt-2">Sirf PDF, max {MAX_MB} MB.</p>
+        <p className="text-neutral-600 text-xs mt-2">PDF only, max {MAX_MB} MB.</p>
       </div>
 
       <div className="space-y-1">
         {type === 'resume' && (
           <label className="flex items-center gap-2 text-sm text-neutral-300 cursor-pointer min-h-11">
             <input type="checkbox" className="accent-gold h-4 w-4" {...register('isPrimary')} />
-            Primary resume (site ka "Download Resume" yehi dega)
+            Primary resume (the site's "Download Resume" button serves this file)
           </label>
         )}
         <label className="flex items-center gap-2 text-sm text-neutral-300 cursor-pointer min-h-11">
           <input type="checkbox" className="accent-gold h-4 w-4" {...register('isActive')} />
-          Active (site par dikhao)
+          Active (show on site)
         </label>
       </div>
 
@@ -137,7 +137,7 @@ const ManageDocuments = () => {
       api
         .get('/documents/admin/all')
         .then((res) => setItems(res.data.data))
-        .catch(() => toast.error('Documents load nahi hue'))
+        .catch(() => toast.error('Could not load documents'))
         .finally(() => setLoading(false)),
     []
   );
@@ -147,13 +147,13 @@ const ManageDocuments = () => {
   }, [load]);
 
   const remove = async (d) => {
-    if (!window.confirm(`"${d.title}" delete karna hai? File bhi hat jayegi.`)) return;
+    if (!window.confirm(`Delete "${d.title}"? The file will be removed too.`)) return;
     try {
       await api.delete(`/documents/${d._id}`);
       toast.success('Document deleted');
       load();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Delete nahi hua');
+      toast.error(err.response?.data?.message || 'Could not delete');
     }
   };
 
@@ -163,7 +163,7 @@ const ManageDocuments = () => {
       setItems((list) => list.map((i) => (i._id === d._id ? data.data : i)));
       toast.success(data.data.isActive ? 'Document visible' : 'Document hidden');
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Update nahi hua');
+      toast.error(err.response?.data?.message || 'Could not update');
     }
   };
 
@@ -173,7 +173,7 @@ const ManageDocuments = () => {
       toast.success('Primary resume set');
       load();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Update nahi hua');
+      toast.error(err.response?.data?.message || 'Could not update');
     }
   };
 
@@ -192,7 +192,7 @@ const ManageDocuments = () => {
         <p className="text-neutral-500">Loading...</p>
       ) : items.length === 0 ? (
         <div className="border border-dashed border-line p-12 text-center text-neutral-500">
-          Abhi koi PDF nahi hai. Pehle apna resume upload karo.
+          There are no PDFs yet. Upload your resume first.
         </div>
       ) : (
         <div className="bg-surface border border-line divide-y divide-line">
@@ -247,7 +247,7 @@ const ManageDocuments = () => {
                   rel="noreferrer"
                   className="h-11 w-11 flex items-center justify-center border border-line text-neutral-300 hover:border-gold hover:text-gold"
                   aria-label="Open PDF"
-                  title="Open PDF (view count badhta hai)"
+                  title="Open PDF (increases the view count)"
                 >
                   <FaFilePdf />
                 </a>

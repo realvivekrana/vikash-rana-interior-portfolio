@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
 import {
   FaThLarge, FaImages, FaConciergeBell, FaQuoteLeft, FaImage,
   FaUser, FaEnvelope, FaCog, FaSignOutAlt, FaBars, FaTimes,
-  FaTasks, FaFilePdf, FaChartLine, FaPhotoVideo, FaRobot,
+  FaTasks, FaFilePdf, FaChartLine, FaPhotoVideo, FaRobot, FaArrowLeft,
 } from 'react-icons/fa';
 import { useAuth } from '../context/AuthContext';
 
@@ -37,13 +37,18 @@ const AdminLayout = () => {
     <div className="min-h-screen bg-ink">
       {/* Mobile top bar */}
       <div className="lg:hidden sticky top-0 z-50 flex items-center justify-between pl-4 pr-1 h-14 bg-surface border-b border-line">
-        <span className="font-serif text-gold text-lg">Admin Panel</span>
+        <div className="flex items-center">
+          <Link to="/" aria-label="Back to website" className="h-11 w-11 -ml-3 flex items-center justify-center text-neutral-300 hover:text-gold">
+            <FaArrowLeft />
+          </Link>
+          <span className="font-serif text-gold text-lg">Admin Panel</span>
+        </div>
         <button onClick={() => setOpen(!open)} className="h-11 w-11 flex items-center justify-center text-white text-xl" aria-label="Menu" aria-expanded={open}>
           {open ? <FaTimes /> : <FaBars />}
         </button>
       </div>
 
-      {/* Mobile menu ke peeche dim backdrop */}
+      {/* Dim backdrop behind the mobile menu */}
       {open && (
         <div className="lg:hidden fixed inset-0 top-14 z-30 bg-black/60" onClick={() => setOpen(false)} />
       )}
@@ -81,6 +86,12 @@ const AdminLayout = () => {
 
         <div className="p-4 border-t border-line">
           <p className="text-xs text-neutral-500 truncate mb-3 px-2">{admin?.email}</p>
+          <Link
+            to="/"
+            className="w-full flex items-center justify-center gap-2 min-h-11 mb-2 text-sm border border-line text-neutral-300 hover:border-gold hover:text-gold transition-colors"
+          >
+            <FaArrowLeft /> Back to website
+          </Link>
           <button
             onClick={handleLogout}
             className="w-full flex items-center justify-center gap-2 min-h-11 text-sm border border-line text-neutral-300 hover:border-gold hover:text-gold transition-colors"

@@ -55,7 +55,7 @@ const ProjectForm = ({ project, categories, onClose, onSaved }) => {
       toast.success(isEdit ? 'Project updated' : 'Project created');
       onSaved();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Save nahi hua');
+      toast.error(err.response?.data?.message || 'Could not save');
     }
   };
 
@@ -103,7 +103,7 @@ const ProjectForm = ({ project, categories, onClose, onSaved }) => {
           <input className={inputClass} {...register('client')} />
         </div>
         <div>
-          <label className={labelClass}>Display order (chhota number pehle)</label>
+          <label className={labelClass}>Display order (lower number comes first)</label>
           <input type="number" className={inputClass} {...register('order')} />
         </div>
       </div>
@@ -123,7 +123,7 @@ const ProjectForm = ({ project, categories, onClose, onSaved }) => {
 
       {isEdit && project.images?.length > 0 && (
         <div>
-          <label className={labelClass}>Current gallery (click karke remove mark karo)</label>
+          <label className={labelClass}>Current gallery (click an image to mark it for removal)</label>
           <div className="flex flex-wrap gap-3">
             {project.images.map((g) => {
               const marked = removeIds.includes(g.public_id);
@@ -152,7 +152,7 @@ const ProjectForm = ({ project, categories, onClose, onSaved }) => {
       <div className="flex flex-wrap gap-8 pt-1">
         <label className="flex items-center gap-2 text-sm text-neutral-300 cursor-pointer">
           <input type="checkbox" className="accent-gold h-4 w-4" {...register('featured')} />
-          Featured (Home page par dikhao)
+          Featured (show on Home page)
         </label>
         <label className="flex items-center gap-2 text-sm text-neutral-300 cursor-pointer">
           <input type="checkbox" className="accent-gold h-4 w-4" {...register('isPublished')} />
@@ -179,7 +179,7 @@ const ManageProjects = () => {
     return api
       .get('/projects/admin/all')
       .then((res) => setProjects(res.data.data))
-      .catch(() => toast.error('Projects load nahi hue'))
+      .catch(() => toast.error('Could not load projects'))
       .finally(() => setLoading(false));
   }, []);
 
@@ -188,13 +188,13 @@ const ManageProjects = () => {
   }, [load]);
 
   const remove = async (p) => {
-    if (!window.confirm(`"${p.title}" delete karna hai? Uski saari images bhi hat jayengi.`)) return;
+    if (!window.confirm(`Delete "${p.title}"? All its images will be removed too.`)) return;
     try {
       await api.delete(`/projects/${p._id}`);
       toast.success('Project deleted');
       load();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Delete nahi hua');
+      toast.error(err.response?.data?.message || 'Could not delete');
     }
   };
 
@@ -217,7 +217,7 @@ const ManageProjects = () => {
         <p className="text-neutral-500">Loading...</p>
       ) : projects.length === 0 ? (
         <div className="border border-dashed border-line p-12 text-center text-neutral-500">
-          Abhi koi project nahi hai. "Add Project" se pehla project daalo.
+          There are no projects yet. Use "Add Project" to add your first one.
         </div>
       ) : (
         <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-5">

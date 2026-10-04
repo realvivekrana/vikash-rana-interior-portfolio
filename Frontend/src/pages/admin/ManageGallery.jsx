@@ -21,7 +21,7 @@ const CategoryField = ({ register, cats }) => (
         <option key={c} value={c} />
       ))}
     </datalist>
-    <p className="text-neutral-600 text-xs mt-1">Existing category chuno ya naya naam likho.</p>
+    <p className="text-neutral-600 text-xs mt-1">Choose an existing category or type a new name.</p>
   </div>
 );
 
@@ -34,13 +34,13 @@ const UploadForm = ({ cats, onClose, onSaved }) => {
 
   const addFiles = (next) => {
     const ok = next.filter((f) => f.size <= MAX_MB * 1024 * 1024);
-    if (ok.length !== next.length) toast.error(`Kuch photos ${MAX_MB}MB se badi thi, hata di`);
-    if (ok.length > 20) toast.error('Ek baar mein max 20 photos');
+    if (ok.length !== next.length) toast.error(`Some photos were larger than ${MAX_MB}MB and were removed`);
+    if (ok.length > 20) toast.error('Maximum 20 photos at a time');
     setFiles(ok.slice(0, 20));
   };
 
   const onSubmit = async (v) => {
-    if (!files.length) return toast.error('Kam se kam ek photo chuno');
+    if (!files.length) return toast.error('Choose at least one photo');
     const fd = new FormData();
     files.forEach((f) => fd.append('images', f));
     fd.append('category', v.category);
@@ -55,7 +55,7 @@ const UploadForm = ({ cats, onClose, onSaved }) => {
       toast.success(`${files.length} photo${files.length > 1 ? 's' : ''} uploaded`);
       onSaved();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Upload nahi hua');
+      toast.error(err.response?.data?.message || 'Upload failed');
     }
   };
 
@@ -79,7 +79,7 @@ const UploadForm = ({ cats, onClose, onSaved }) => {
             <input type="checkbox" className="accent-gold h-4 w-4" {...register('featured')} /> Featured
           </label>
           <label className="flex items-center gap-2 text-sm text-neutral-300 cursor-pointer min-h-11">
-            <input type="checkbox" className="accent-gold h-4 w-4" {...register('isPublished')} /> Published (site par dikhao)
+            <input type="checkbox" className="accent-gold h-4 w-4" {...register('isPublished')} /> Published (show on site)
           </label>
         </div>
       </div>
@@ -126,7 +126,7 @@ const EditForm = ({ item, cats, onClose, onSaved }) => {
       toast.success('Photo updated');
       onSaved();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Save nahi hua');
+      toast.error(err.response?.data?.message || 'Could not save');
     }
   };
 
@@ -172,7 +172,7 @@ const ManageGallery = () => {
       api
         .get('/gallery/admin/all')
         .then((res) => setItems(res.data.data))
-        .catch(() => toast.error('Gallery load nahi hui'))
+        .catch(() => toast.error('Could not load the gallery'))
         .finally(() => setLoading(false)),
     []
   );
@@ -202,7 +202,7 @@ const ManageGallery = () => {
     });
 
   const removeOne = async (it) => {
-    if (!window.confirm('Ye photo delete karni hai?')) return;
+    if (!window.confirm('Delete this photo?')) return;
     try {
       await api.delete(`/gallery/${it._id}`);
       toast.success('Photo deleted');
@@ -213,20 +213,20 @@ const ManageGallery = () => {
       });
       load();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Delete nahi hua');
+      toast.error(err.response?.data?.message || 'Could not delete');
     }
   };
 
   const removeSelected = async () => {
     const ids = [...selected];
-    if (!ids.length || !window.confirm(`${ids.length} photos delete karni hain?`)) return;
+    if (!ids.length || !window.confirm(`Delete ${ids.length} photos?`)) return;
     try {
       await api.delete('/gallery', { data: { ids } });
       toast.success(`${ids.length} photos deleted`);
       setSelected(new Set());
       load();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Delete nahi hua');
+      toast.error(err.response?.data?.message || 'Could not delete');
     }
   };
 
@@ -236,7 +236,7 @@ const ManageGallery = () => {
       setItems((list) => list.map((i) => (i._id === it._id ? data.data : i)));
       toast.success(data.data.isPublished ? 'Photo visible' : 'Photo hidden');
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Update nahi hua');
+      toast.error(err.response?.data?.message || 'Could not update');
     }
   };
 
@@ -282,7 +282,7 @@ const ManageGallery = () => {
       {loading ? (
         <p className="text-neutral-500">Loading...</p>
       ) : items.length === 0 ? (
-        <div className="border border-dashed border-line p-12 text-center text-neutral-500">Abhi gallery mein koi photo nahi hai.</div>
+        <div className="border border-dashed border-line p-12 text-center text-neutral-500">There are no photos in the gallery yet.</div>
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4">
           {visible.map((it) => {

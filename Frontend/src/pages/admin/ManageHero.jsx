@@ -27,7 +27,7 @@ const ManageHero = () => {
         });
         setExisting(h.backgroundImage?.url || '');
       })
-      .catch(() => toast.error('Hero load nahi hua'))
+      .catch(() => toast.error('Could not load Hero'))
       .finally(() => setLoading(false));
   }, [reset]);
 
@@ -41,7 +41,7 @@ const ManageHero = () => {
       setBg(null);
       toast.success('Hero section updated');
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Save nahi hua');
+      toast.error(err.response?.data?.message || 'Could not save');
     }
   };
 
@@ -49,7 +49,7 @@ const ManageHero = () => {
 
   return (
     <div className="max-w-3xl">
-      <PageHeader title="Hero Section" subtitle="Home page ka sabse upar wala banner" />
+      <PageHeader title="Hero Section" subtitle="The banner at the very top of the Home page" />
 
       <form onSubmit={handleSubmit(onSubmit)} className="bg-surface border border-line p-6 md:p-8 space-y-5">
         <div>

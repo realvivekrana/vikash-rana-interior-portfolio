@@ -34,7 +34,7 @@ const ServiceForm = ({ service, onClose, onSaved }) => {
       toast.success(isEdit ? 'Service updated' : 'Service added');
       onSaved();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Save nahi hua');
+      toast.error(err.response?.data?.message || 'Could not save');
     }
   };
 
@@ -80,7 +80,7 @@ const ServiceForm = ({ service, onClose, onSaved }) => {
         </div>
         <label className="flex items-center gap-2 text-sm text-neutral-300 cursor-pointer pb-2">
           <input type="checkbox" className="accent-gold h-4 w-4" {...register('isActive')} />
-          Active (site par dikhao)
+          Active (show on site)
         </label>
       </div>
 
@@ -103,7 +103,7 @@ const ManageServices = () => {
     return api
       .get('/services/admin/all')
       .then((res) => setItems(res.data.data))
-      .catch(() => toast.error('Services load nahi hui'))
+      .catch(() => toast.error('Could not load services'))
       .finally(() => setLoading(false));
   }, []);
 
@@ -112,13 +112,13 @@ const ManageServices = () => {
   }, [load]);
 
   const remove = async (s) => {
-    if (!window.confirm(`"${s.title}" delete karna hai?`)) return;
+    if (!window.confirm(`Delete "${s.title}"?`)) return;
     try {
       await api.delete(`/services/${s._id}`);
       toast.success('Service deleted');
       load();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Delete nahi hua');
+      toast.error(err.response?.data?.message || 'Could not delete');
     }
   };
 
@@ -128,7 +128,7 @@ const ManageServices = () => {
       setItems((list) => list.map((i) => (i._id === s._id ? data.data : i)));
       toast.success(data.data.isActive ? 'Service visible' : 'Service hidden');
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Update nahi hua');
+      toast.error(err.response?.data?.message || 'Could not update');
     }
   };
 
@@ -146,7 +146,7 @@ const ManageServices = () => {
         <p className="text-neutral-500">Loading...</p>
       ) : items.length === 0 ? (
         <div className="border border-dashed border-line p-12 text-center text-neutral-500">
-          Abhi koi service nahi hai.
+          There are no services yet.
         </div>
       ) : (
         <div className="bg-surface border border-line divide-y divide-line">

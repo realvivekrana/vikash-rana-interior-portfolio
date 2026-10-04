@@ -35,7 +35,7 @@ const ManageAbout = () => {
         });
         setExisting(a.photo?.url || '');
       })
-      .catch(() => toast.error('About load nahi hua'))
+      .catch(() => toast.error('Could not load About'))
       .finally(() => setLoading(false));
   }, [reset]);
 
@@ -53,7 +53,7 @@ const ManageAbout = () => {
       setPhoto(null);
       toast.success('About page updated');
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Save nahi hua');
+      toast.error(err.response?.data?.message || 'Could not save');
     }
   };
 
@@ -61,7 +61,7 @@ const ManageAbout = () => {
 
   return (
     <div className="max-w-3xl">
-      <PageHeader title="About" subtitle="Tumhari kahani, photo aur stats" />
+      <PageHeader title="About" subtitle="Your story, photo and stats" />
 
       <form onSubmit={handleSubmit(onSubmit)} className="bg-surface border border-line p-6 md:p-8 space-y-5">
         <div className="grid sm:grid-cols-2 gap-5">
@@ -110,7 +110,7 @@ const ManageAbout = () => {
               <FaPlus /> Add stat
             </button>
           )}
-          <p className="text-neutral-600 text-xs mt-2">Site par 3 stats ke liye jagah hai.</p>
+          <p className="text-neutral-600 text-xs mt-2">The site has room for 3 stats.</p>
         </div>
 
         <div className="pt-4 border-t border-line flex justify-end">

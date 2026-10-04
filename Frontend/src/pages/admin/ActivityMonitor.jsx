@@ -48,7 +48,7 @@ const Kpi = ({ icon: Icon, label, value, sub }) => (
   </div>
 );
 
-const BarList = ({ items, empty = 'Abhi data nahi hai', format = (n) => n }) => {
+const BarList = ({ items, empty = 'No data yet', format = (n) => n }) => {
   const max = Math.max(...items.map((i) => i.count), 1);
   if (!items.length) return <p className="text-neutral-500 text-sm">{empty}</p>;
   return (
@@ -95,7 +95,7 @@ const ActivityMonitor = ({ embedded = false }) => {
       setError('');
       setUpdatedAt(new Date());
     } catch (err) {
-      setError(err.response?.data?.message || 'Monitoring data load nahi hua. Backend chal raha hai?');
+      setError(err.response?.data?.message || 'Could not load monitoring data. Is the backend running?');
     } finally {
       setRefreshing(false);
     }
@@ -111,7 +111,7 @@ const ActivityMonitor = ({ embedded = false }) => {
       const res = await api.get('/activity/logs', { params });
       if (logParams.current === params) setLogs(res.data);
     } catch {
-      /* overview ka error pehle se dikh raha hai */
+      /* the overview error is already being shown */
     } finally {
       setLogsLoading(false);
     }
@@ -129,7 +129,7 @@ const ActivityMonitor = ({ embedded = false }) => {
     return () => clearInterval(t);
   }, [loadLogs]);
 
-  // Search box ko 400ms debounce
+  // Debounce the search box by 400ms
   useEffect(() => {
     const t = setTimeout(() => {
       setQuery(q.trim());
@@ -138,7 +138,7 @@ const ActivityMonitor = ({ embedded = false }) => {
     return () => clearTimeout(t);
   }, [q]);
 
-  // "Updated Xs ago" label chalta rahe
+  // Keep the "Updated Xs ago" label ticking
   useEffect(() => {
     const t = setInterval(() => setTick((n) => n + 1), 10000);
     return () => clearInterval(t);
@@ -278,7 +278,7 @@ const ActivityMonitor = ({ embedded = false }) => {
         {picked && (
           <p className="mt-4 pt-4 border-t border-line text-sm text-neutral-300">
             <span className="text-gold">{formatDay(picked.date)}</span>: {picked.views} views · {picked.visitors} visitors
-            <span className="text-neutral-600"> (bar par tap karke din badlo)</span>
+            <span className="text-neutral-600"> (tap a bar to change the day)</span>
           </p>
         )}
       </Card>
@@ -323,7 +323,7 @@ const ActivityMonitor = ({ embedded = false }) => {
       <div className="grid md:grid-cols-2 gap-6 mb-6">
         <Card title="Recent visits">
           {recentVisits.length === 0 ? (
-            <p className="text-neutral-500 text-sm">Abhi koi visit record nahi hua.</p>
+            <p className="text-neutral-500 text-sm">No visits recorded yet.</p>
           ) : (
             <ul className="divide-y divide-line">
               {recentVisits.map((v) => (
@@ -354,7 +354,7 @@ const ActivityMonitor = ({ embedded = false }) => {
             </p>
           </div>
           {security.recentLogins.length === 0 ? (
-            <p className="text-neutral-500 text-sm">Abhi koi login record nahi hai.</p>
+            <p className="text-neutral-500 text-sm">No logins recorded yet.</p>
           ) : (
             <ul className="divide-y divide-line">
               {security.recentLogins.map((l) => (
@@ -403,7 +403,7 @@ const ActivityMonitor = ({ embedded = false }) => {
         {logsLoading ? (
           <p className="text-neutral-500 text-sm py-6">Loading...</p>
         ) : logs.data.length === 0 ? (
-          <p className="text-neutral-500 text-sm py-6 text-center border border-dashed border-line">Koi activity nahi mili.</p>
+          <p className="text-neutral-500 text-sm py-6 text-center border border-dashed border-line">No activity found.</p>
         ) : (
           <ul className="divide-y divide-line border-y border-line">
             {logs.data.map((a) => {

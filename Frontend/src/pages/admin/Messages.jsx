@@ -21,7 +21,7 @@ const Messages = () => {
     api
       .get('/messages')
       .then((res) => setItems(res.data.data))
-      .catch(() => toast.error('Messages load nahi hue'))
+      .catch(() => toast.error('Could not load messages'))
       .finally(() => setLoading(false));
   }, []);
 
@@ -30,7 +30,7 @@ const Messages = () => {
       const { data } = await api.patch(`/messages/${id}/read`);
       setItems((list) => list.map((m) => (m._id === id ? data.data : m)));
     } catch {
-      toast.error('Update nahi hua');
+      toast.error('Could not update');
     }
   };
 
@@ -41,13 +41,13 @@ const Messages = () => {
   };
 
   const remove = async (m) => {
-    if (!window.confirm(`${m.name} ka message delete karna hai?`)) return;
+    if (!window.confirm(`Delete ${m.name}'s message?`)) return;
     try {
       await api.delete(`/messages/${m._id}`);
       setItems((list) => list.filter((i) => i._id !== m._id));
       toast.success('Message deleted');
     } catch {
-      toast.error('Delete nahi hua');
+      toast.error('Could not delete');
     }
   };
 
@@ -57,7 +57,7 @@ const Messages = () => {
       setItems((list) => list.map((m) => ({ ...m, isRead: true })));
       toast.success('All messages marked as read');
     } catch {
-      toast.error('Update nahi hua');
+      toast.error('Could not update');
     }
   };
 
@@ -115,7 +115,7 @@ const Messages = () => {
         <p className="text-neutral-500">Loading...</p>
       ) : items.length === 0 ? (
         <div className="border border-dashed border-line p-12 text-center text-neutral-500">
-          Abhi koi message nahi aaya.
+          No messages yet.
         </div>
       ) : visible.length === 0 ? (
         <div className="border border-dashed border-line p-10 text-center text-neutral-500">

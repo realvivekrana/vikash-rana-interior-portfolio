@@ -7,7 +7,7 @@ import { inputClass, labelClass, goldBtn } from '../../utils/ui';
 import PageHeader from '../../components/admin/PageHeader';
 import ImageInput from '../../components/admin/ImageInput';
 
-// Agar poora <iframe ...> paste ho jaye to usme se sirf src nikal lo
+// If a full <iframe ...> is pasted, extract just the src
 const extractSrc = (v = '') => {
   const m = v.match(/src="([^"]+)"/);
   return m ? m[1] : v.trim();
@@ -40,7 +40,7 @@ const SiteSettings = () => {
         });
         setExisting(s.logo?.url || '');
       })
-      .catch(() => toast.error('Settings load nahi hui'))
+      .catch(() => toast.error('Could not load settings'))
       .finally(() => setLoading(false));
   }, [reset]);
 
@@ -57,7 +57,7 @@ const SiteSettings = () => {
       setLogo(null);
       toast.success('Settings saved');
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Save nahi hua');
+      toast.error(err.response?.data?.message || 'Could not save');
     }
   };
 
@@ -79,7 +79,7 @@ const SiteSettings = () => {
           <textarea rows={2} className={inputClass} {...register('tagline')} />
         </div>
         <ImageInput
-          label="Logo (optional, na ho to site name text dikhega)"
+          label="Logo (optional; if empty, the site name is shown as text)"
           file={logo}
           existing={existing && img(existing, 200)}
           onChange={setLogo}
@@ -94,7 +94,7 @@ const SiteSettings = () => {
             <input className={inputClass} placeholder="+91 98765 43210" {...register('phone')} />
           </div>
           <div>
-            <label className={labelClass}>WhatsApp (country code ke saath)</label>
+            <label className={labelClass}>WhatsApp (with country code)</label>
             <input className={inputClass} placeholder="919876543210" {...register('whatsapp')} />
           </div>
         </div>
@@ -112,8 +112,8 @@ const SiteSettings = () => {
         </div>
         <div>
           <label className={labelClass}>Google Map embed</label>
-          <textarea rows={2} className={inputClass} placeholder="Google Maps, Share, Embed a map, wahan ka code paste karo" {...register('mapEmbed')} />
-          <p className="text-neutral-600 text-xs mt-1">Poora iframe code paste kar sakte ho, hum sirf link utha lenge.</p>
+          <textarea rows={2} className={inputClass} placeholder="Google Maps > Share > Embed a map, then paste the code here" {...register('mapEmbed')} />
+          <p className="text-neutral-600 text-xs mt-1">You can paste the full iframe code; we will extract just the link.</p>
         </div>
       </div>
 
@@ -162,10 +162,10 @@ const ChangePassword = () => {
   const onSubmit = async ({ currentPassword, newPassword }) => {
     try {
       await api.put('/auth/change-password', { currentPassword, newPassword });
-      toast.success('Password badal gaya');
+      toast.success('Password changed');
       reset();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Password nahi badla');
+      toast.error(err.response?.data?.message || 'Could not change password');
     }
   };
 
@@ -183,7 +183,7 @@ const ChangePassword = () => {
           <input
             type="password"
             className={inputClass}
-            {...register('newPassword', { required: 'Required', minLength: { value: 8, message: 'Kam se kam 8 characters' } })}
+            {...register('newPassword', { required: 'Required', minLength: { value: 8, message: 'At least 8 characters' } })}
           />
           {errors.newPassword && <p className="text-red-400 text-xs mt-1">{errors.newPassword.message}</p>}
         </div>
@@ -194,7 +194,7 @@ const ChangePassword = () => {
             className={inputClass}
             {...register('confirm', {
               required: 'Required',
-              validate: (v) => v === watch('newPassword') || 'Password match nahi kar raha',
+              validate: (v) => v === watch('newPassword') || 'Passwords do not match',
             })}
           />
           {errors.confirm && <p className="text-red-400 text-xs mt-1">{errors.confirm.message}</p>}
@@ -211,7 +211,7 @@ const ChangePassword = () => {
 
 const Settings = () => (
   <div className="max-w-3xl">
-    <PageHeader title="Settings" subtitle="Contact info, social links, SEO aur password" />
+    <PageHeader title="Settings" subtitle="Contact info, social links, SEO and password" />
     <div className="space-y-6">
       <SiteSettings />
       <ChangePassword />

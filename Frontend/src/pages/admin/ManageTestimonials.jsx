@@ -36,7 +36,7 @@ const TestimonialForm = ({ item, onClose, onSaved }) => {
       toast.success(isEdit ? 'Testimonial updated' : 'Testimonial added');
       onSaved();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Save nahi hua');
+      toast.error(err.response?.data?.message || 'Could not save');
     }
   };
 
@@ -71,7 +71,7 @@ const TestimonialForm = ({ item, onClose, onSaved }) => {
         </div>
         <label className="flex items-center gap-2 text-sm text-neutral-300 cursor-pointer pb-2">
           <input type="checkbox" className="accent-gold h-4 w-4" {...register('isActive')} />
-          Active (site par dikhao)
+          Active (show on site)
         </label>
       </div>
 
@@ -101,7 +101,7 @@ const ManageTestimonials = () => {
     return api
       .get('/testimonials/admin/all')
       .then((res) => setItems(res.data.data))
-      .catch(() => toast.error('Testimonials load nahi hue'))
+      .catch(() => toast.error('Could not load testimonials'))
       .finally(() => setLoading(false));
   }, []);
 
@@ -110,13 +110,13 @@ const ManageTestimonials = () => {
   }, [load]);
 
   const remove = async (t) => {
-    if (!window.confirm(`${t.name} ka review delete karna hai?`)) return;
+    if (!window.confirm(`Delete ${t.name}'s review?`)) return;
     try {
       await api.delete(`/testimonials/${t._id}`);
       toast.success('Testimonial deleted');
       load();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Delete nahi hua');
+      toast.error(err.response?.data?.message || 'Could not delete');
     }
   };
 
@@ -126,7 +126,7 @@ const ManageTestimonials = () => {
       setItems((list) => list.map((i) => (i._id === t._id ? data.data : i)));
       toast.success(data.data.isActive ? 'Testimonial visible' : 'Testimonial hidden');
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Update nahi hua');
+      toast.error(err.response?.data?.message || 'Could not update');
     }
   };
 
@@ -144,7 +144,7 @@ const ManageTestimonials = () => {
         <p className="text-neutral-500">Loading...</p>
       ) : items.length === 0 ? (
         <div className="border border-dashed border-line p-12 text-center text-neutral-500">
-          Abhi koi testimonial nahi hai.
+          There are no testimonials yet.
         </div>
       ) : (
         <div className="grid md:grid-cols-2 gap-5">

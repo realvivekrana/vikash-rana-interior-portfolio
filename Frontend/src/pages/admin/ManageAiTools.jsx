@@ -33,7 +33,7 @@ const AiToolForm = ({ tool, onClose, onSaved }) => {
       toast.success(isEdit ? 'AI tool updated' : 'AI tool added');
       onSaved();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Save nahi hua');
+      toast.error(err.response?.data?.message || 'Could not save');
     }
   };
 
@@ -53,7 +53,7 @@ const AiToolForm = ({ tool, onClose, onSaved }) => {
             <option key={c} value={c} />
           ))}
         </datalist>
-        <p className="text-neutral-600 text-xs mt-1">Same category ke tools site par ek group mein dikhte hain. Naya naam bhi likh sakte ho.</p>
+        <p className="text-neutral-600 text-xs mt-1">Tools in the same category appear together as one group on the site. You can also type a new name.</p>
       </div>
 
       <div>
@@ -78,7 +78,7 @@ const AiToolForm = ({ tool, onClose, onSaved }) => {
         </div>
         <label className="flex items-center gap-2 text-sm text-neutral-300 cursor-pointer pb-2 min-h-11">
           <input type="checkbox" className="accent-gold h-4 w-4" {...register('isActive')} />
-          Active (site par dikhao)
+          Active (show on site)
         </label>
       </div>
 
@@ -102,7 +102,7 @@ const ManageAiTools = () => {
       api
         .get('/ai-tools/admin/all')
         .then((res) => setItems(res.data.data))
-        .catch(() => toast.error('AI tools load nahi hue'))
+        .catch(() => toast.error('Could not load AI tools'))
         .finally(() => setLoading(false)),
     []
   );
@@ -112,13 +112,13 @@ const ManageAiTools = () => {
   }, [load]);
 
   const remove = async (s) => {
-    if (!window.confirm(`"${s.name}" delete karna hai?`)) return;
+    if (!window.confirm(`Delete "${s.name}"?`)) return;
     try {
       await api.delete(`/ai-tools/${s._id}`);
       toast.success('AI tool deleted');
       load();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Delete nahi hua');
+      toast.error(err.response?.data?.message || 'Could not delete');
     }
   };
 
@@ -128,7 +128,7 @@ const ManageAiTools = () => {
       setItems((list) => list.map((i) => (i._id === s._id ? data.data : i)));
       toast.success(data.data.isActive ? 'Tool visible' : 'Tool hidden');
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Update nahi hua');
+      toast.error(err.response?.data?.message || 'Could not update');
     }
   };
 
@@ -145,7 +145,7 @@ const ManageAiTools = () => {
       {loading ? (
         <p className="text-neutral-500">Loading...</p>
       ) : items.length === 0 ? (
-        <div className="border border-dashed border-line p-12 text-center text-neutral-500">Abhi koi AI tool nahi hai.</div>
+        <div className="border border-dashed border-line p-12 text-center text-neutral-500">There are no AI tools yet.</div>
       ) : (
         <div className="bg-surface border border-line divide-y divide-line">
           {items.map((s) => (

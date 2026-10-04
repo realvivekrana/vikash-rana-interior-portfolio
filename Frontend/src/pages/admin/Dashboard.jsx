@@ -81,7 +81,7 @@ const Dashboard = () => {
   return (
     <div>
       <h1 className="font-serif text-3xl text-white mb-1">Dashboard</h1>
-      <p className="text-neutral-500 text-sm mb-6">Site ka overview</p>
+      <p className="text-neutral-500 text-sm mb-6">Site overview</p>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-8">
         {cards.map(({ label, value, icon: Icon, live }) => (
@@ -105,7 +105,7 @@ const Dashboard = () => {
       <div className="grid xl:grid-cols-2 gap-6 mb-8">
         <Panel title="Skills" icon={FaTasks} to="/admin/skills" linkLabel="Manage">
           {skills.length === 0 ? (
-            <Empty text="Abhi koi skill add nahi hui." to="/admin/skills" label="Add skill" />
+            <Empty text="No skills added yet." to="/admin/skills" label="Add skill" />
           ) : (
             <ul className="divide-y divide-line">
               {skills.slice(0, 6).map((s) => (
@@ -123,7 +123,7 @@ const Dashboard = () => {
                 </li>
               ))}
               {skills.length > 6 && (
-                <li className="px-4 sm:px-5 py-3 text-xs text-neutral-500">+ {skills.length - 6} aur skills</li>
+                <li className="px-4 sm:px-5 py-3 text-xs text-neutral-500">+ {skills.length - 6} more skills</li>
               )}
             </ul>
           )}
@@ -131,7 +131,7 @@ const Dashboard = () => {
 
         <Panel title="Resume & PDFs" icon={FaFilePdf} to="/admin/documents" linkLabel="Manage">
           {docs.length === 0 ? (
-            <Empty text="Abhi koi PDF upload nahi hui." to="/admin/documents" label="Upload resume" />
+            <Empty text="No PDFs uploaded yet." to="/admin/documents" label="Upload resume" />
           ) : (
             <ul className="divide-y divide-line">
               {docs.slice(0, 6).map((d) => (
@@ -151,7 +151,7 @@ const Dashboard = () => {
                 </li>
               ))}
               {docs.length > 6 && (
-                <li className="px-4 sm:px-5 py-3 text-xs text-neutral-500">+ {docs.length - 6} aur files</li>
+                <li className="px-4 sm:px-5 py-3 text-xs text-neutral-500">+ {docs.length - 6} more files</li>
               )}
             </ul>
           )}
@@ -162,7 +162,7 @@ const Dashboard = () => {
         <h2 className="font-serif text-xl text-white mb-4">Recent Messages</h2>
         <div className="bg-surface border border-line divide-y divide-line">
           {stats.recentMessages.length === 0 && (
-            <p className="p-5 text-neutral-500 text-sm">Abhi koi message nahi aaya.</p>
+            <p className="p-5 text-neutral-500 text-sm">No messages yet.</p>
           )}
           {stats.recentMessages.map((m) => (
             <div key={m._id} className="p-4 sm:p-5 flex items-start justify-between gap-4">
