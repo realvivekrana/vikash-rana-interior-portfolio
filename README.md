@@ -32,6 +32,9 @@ npm run dev               # http://localhost:5000
 | `JWT_SECRET` | Lamba random string (32+ characters) |
 | `CLOUDINARY_*` | Cloudinary dashboard se cloud name, key, secret |
 | `CLIENT_URL` | Frontend URL (kai ho to comma se alag karo) |
+| `GEMINI_API_KEY` | AI Tools page ke liye (Google AI Studio se free key). Iske bina AI tools "not available" dikhayenge |
+| `GEMINI_MODEL` | (optional) default `gemini-flash-latest` |
+| `NODE_ENV` | Live server par `production` rakho (error stack hide hota hai) |
 | `ADMIN_EMAIL`, `ADMIN_PASSWORD` | Sirf `npm run seed` ke liye |
 
 ### 2. Frontend
